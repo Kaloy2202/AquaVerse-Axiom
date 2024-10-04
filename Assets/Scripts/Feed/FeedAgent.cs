@@ -6,11 +6,13 @@ using System.Collections;
 
 public class FeedAgent : AbstractAgent
 {
-    private Vector3 direction;
     private float content;
     private Rigidbody rb;
 
     private float maxMagnitude = 1;
+
+    //reference to the pool end of dimension position
+    private float top, bottom, left, right, front, back;
     public override void Init()
     {
         base.Init();
@@ -21,6 +23,14 @@ public class FeedAgent : AbstractAgent
         content = 10;
         //create stepper
         CreateStepper(Behave);
+
+        SceneMngrState sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
+        top = sceneMngrState.getTop();
+        bottom = sceneMngrState.getBot();
+        left = sceneMngrState.getLeft();
+        right = sceneMngrState.getRight();
+        front = sceneMngrState.getFront();
+        back = sceneMngrState.getBack();
     }
     //determines the movement of the feed
     void Behave(){
@@ -28,11 +38,8 @@ public class FeedAgent : AbstractAgent
         if(content <= 0){
             Die();
         // use add force to determine the mvoement of the feed
-        }else{
-            if(rb){
-                rb.AddForce(direction);
-            }
         }
+        adjustWhenOutsidePool();
     }
     //destroy the game object
     void Die(){
@@ -50,19 +57,36 @@ public class FeedAgent : AbstractAgent
     }
     //calculates the direction where the feed will go
     //ideal opposite of the direction
-    public void calculateMagnitude(Vector3 pos, float radius){
+    public Vector3 calculateMagnitude(Vector3 pos, float radius){
         float distance = Vector3.Distance(transform.position, pos);
 
         // If the point is outside the radius, return the minimum value
         if (distance > radius)
         {
-            direction = Vector3.zero;
+            return Vector3.zero;
         }else{
             // Calculate the value based on the distance
             float magnitude = maxMagnitude * (1 - (distance / maxMagnitude));
 
-            direction = (pos - transform.position).normalized * magnitude;
+            Vector3 direction = (pos - transform.position).normalized * magnitude;
             direction.y = 0;
+            return direction;
         }
+    }
+    //makes sure that the feed object does not move out of the pool
+    private void adjustWhenOutsidePool (){
+        Vector3 velocity = rb.velocity;
+        if(transform.position.x < left || transform.position.x > right){
+            velocity.x *= -1;
+        }
+        if(transform.position.z > front || transform.position.z < back){
+            velocity.z *= -1;
+        }
+        rb.velocity = velocity;
+    }
+
+    public void applyForce(Vector3 forceSource, float forceRadius){
+        Vector3 dir = calculateMagnitude(forceSource, forceRadius);
+        rb.AddForce(dir);
     }
 }

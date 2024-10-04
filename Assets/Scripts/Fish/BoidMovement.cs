@@ -35,7 +35,6 @@ public class BoidMovement : AbstractAgent
     private void Move(){
         //if there is a bias e.g., there is a food source, prioritize going to the biased position
         if(biasDirection != null && hasBias){
-            Debug.Log("has bias");
             calcBiasEffect();
         //move normally according to the boid principle
         }else {

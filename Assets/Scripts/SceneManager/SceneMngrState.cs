@@ -89,7 +89,7 @@ public class SceneMngrState : MonoBehaviour
             movement = coll.gameObject.GetComponent<FeedAgent>();
             if(movement){
                 //calculate the force of the splash based on the radius and the distance from the center
-                movement.calculateMagnitude(pos, radius);
+                movement.applyForce(pos, radius);
             }
         }
     }

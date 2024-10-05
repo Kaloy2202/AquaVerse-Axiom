@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - fish
   - feed
+  - fish
   layers:
   - Default
   - TransparentFX
@@ -16,8 +16,8 @@ TagManager:
   - whatIsGround
   - fish
   - feed
-  - 
-  - 
+  - pool
+  - input
   - 
   - 
   - 

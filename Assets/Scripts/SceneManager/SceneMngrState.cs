@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SceneMngrState : MonoBehaviour
@@ -17,14 +13,19 @@ public class SceneMngrState : MonoBehaviour
     [SerializeField] private Vector3 center;
     [SerializeField] private GameObject foodObject;
     [SerializeField] private LayerMask foodLayer;
-
     [SerializeField] private LayerMask fishLayer;
-    private FeedController feedController;
+    [SerializeField] private int status;
 
+    private Vector3 gizPos;
+    private FishController fishController;
+    private float rad;
     void Start()
     {
-        feedController = GameObject.Find("FeedController").GetComponent<FeedController>();
-        spawnFeeds();
+        //0 for feed
+        //1 for fish 
+        status = 0;
+        fishController = GameObject.Find("FishController").GetComponent<FishController>();
+        spawnFish();
     }
 
     public float getAvoidFactor(){
@@ -75,12 +76,21 @@ public class SceneMngrState : MonoBehaviour
     public float getBiasFactor(){
         return  biasFactor;
     }
+
+    public void setStatus(int value){
+        this.status = value;
+    }
+    public int getStatus(){
+        return status;
+    }
     //creates splash in the water
     //requires mass, the mass of object that caused the splash
     //position, center of the position where the splash will occur
     public void createSplash(float mass, Vector3 pos){
+        gizPos = pos;
         //calculate the radius of the splash
         float radius = calculateSplashRadius(mass);
+        rad = radius;
         //get the collider given the radius
         Collider[] feeds = Physics.OverlapSphere(pos, radius, foodLayer);
         //reference to the FeedAgent script of the feed
@@ -106,26 +116,18 @@ public class SceneMngrState : MonoBehaviour
         float radius = Mathf.Pow(mass/800, 1f / 3f);
         return radius;
     }
-    //create instances of the feeds
-    private void spawnFeeds(){
-        //position to spawn
 
-        //reference to the boid movemnt
-        BoidMovement movement;
-        //instantiate the feeds
-        feedController.generateFeeds(100, center);
-        //get all instances of fish
-        GameObject[] fishes = GameObject.FindGameObjectsWithTag("fish");
-        Debug.Log(fishes.Count());
-        //broadcast the location of the feeds
-        //do this when feeding
-        foreach(GameObject f in fishes){
-            movement = f.GetComponent<BoidMovement>();
-            movement.setBiasDirection(center);
-            movement.setHasBias(true);
-            movement.setSpeedmultiplier(2);
-        }
+    void OnDrawGizmos()
+    {
+        // Set the color of the Gizmos
+        Gizmos.color = Color.red;
+
+        // Draw a wireframe sphere to visualize the OverlapSphere
+        Gizmos.DrawWireSphere(gizPos, rad);
     }
 
-
+    private void spawnFish (){
+        Vector3 pos = new Vector3(Random.Range(getRight(), getLeft()), getTop(), Random.Range(getBack(), getFront()));
+        fishController.spawnFish(pos);
+    }
 }

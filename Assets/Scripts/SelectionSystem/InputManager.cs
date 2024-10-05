@@ -28,5 +28,18 @@ public class InputManager : MonoBehaviour
         //returning the last position means returning the position that is valid
         return lastPosition;
     }
+
+    public Vector3? getMousePosition(){
+        Vector3 mousePos = Input.mousePosition;
+
+        mousePos.z = sceneCamera.nearClipPlane;
+
+        Ray ray = sceneCamera.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, 100, placementLayer)){
+            return hit.point;
+        }
+        return null;
+    }
 }
 

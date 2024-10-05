@@ -10,39 +10,33 @@ public class BoidMovement : AbstractAgent
     private float speedMultiplier = 1;
     private Vector3 biasDirection;
     private bool hasBias;
-    private Growth growth;
     public override void Init()
     {
         base.Init();
         //reference to the scene manager
         sceneMngr = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
-        CreateStepper(Move);
-        //set up the initial position of the boid
-        transform.position = new Vector3(
-            Random.Range(sceneMngr.getLeft(), sceneMngr.getRight()),
-            Random.Range(sceneMngr.getTop(), sceneMngr.getBot()),
-            Random.Range(sceneMngr.getFront(), sceneMngr.getBack())
-        );
-        //initial velocity
-        velocity = new Vector3(Random.Range(-1f, 1),Random.Range(-1f, 1),Random.Range(-1f, 1));
+        CreateStepper(Move); 
         //initial speed multiplier
         speedMultiplier = 1;
-        //reference to the growth script of the agent
-        growth = GetComponent<Growth>();
     }
 
     //moves the boid based on the value of the velocity property
     private void Move(){
-        //if there is a bias e.g., there is a food source, prioritize going to the biased position
-        if(biasDirection != null && hasBias){
+        // if there is a bias e.g., there is a food source, prioritize going to the biased position
+        if(hasBias){
             calcBiasEffect();
-        //move normally according to the boid principle
-        }else {
-            velocity += calcCohesionVector() * sceneMngr.getCenteringFactor();
-            velocity += calcAlignmentVector() * sceneMngr.getMatchingFactor();
         }
-        //seperation is important for the movement
         velocity += calcSeperationVector() * sceneMngr.getAvoidFactor();
+        velocity += calcAlignmentVector() * sceneMngr.getMatchingFactor();
+        velocity += calcCohesionVector() * sceneMngr.getCenteringFactor();
+        //seperation is important for the movement
+
+        // apply only 80% percent of the direction in the y axis
+        //prevents too much movement of the boid along the y axis
+        velocity.y *= 0.8f;
+        //check if boid is outside of the specified pond area
+        //mechanic for preventing the boid from going out the area and provide a smooth transition
+        agentOutsideOfPond();
 
         //if velocity is less than the set min speed, make it equal to the min speed
         if(velocity.magnitude < sceneMngr.getMinSpeed()){
@@ -52,14 +46,6 @@ public class BoidMovement : AbstractAgent
         if(velocity.magnitude > sceneMngr.getMaxSpeed()){
             velocity = velocity.normalized * sceneMngr.getMaxSpeed();
         }
-        // apply only 80% percent of the direction in the y axis
-        //prevents too much movement of the boid along the y axis
-        velocity.y *= 0.8f;
-        //check if boid is outside of the specified pond area
-        //mechanic for preventing the boid from going out the area and provide a smooth transition
-        agentOutsideOfPond();
-        //normalize the velocity
-        velocity = velocity.normalized;
         //change the position of the boid based on the calculated velocity
         transform.position += velocity * Time.deltaTime * speedMultiplier; //* growth.getWeightBasedSpeedMultiplier();
         //rotate the boid to face the direction stated by the velocity
@@ -69,7 +55,7 @@ public class BoidMovement : AbstractAgent
     void OnTriggerEnter(Collider collider){
         //adds neighbor 
         // used to efficiently manage the neighbors and keeps the number of neighbors to limited number for the sake of performance
-        if(collider.CompareTag("fish") && !fishInRange.Contains(collider.gameObject) && fishInRange.Count < 5){
+        if(collider.CompareTag("fish") && !fishInRange.Contains(collider.gameObject)){
             fishInRange.Add(collider.gameObject);
         }
     }
@@ -88,7 +74,7 @@ private Vector3 calcSeperationVector() {
         //distance of the boid from its neighbor
         float distanceSquared = difference.sqrMagnitude;
         //if distance of neighbor is less than or equal to the 80%  of the length of the boid then include it to the neighbors to keep distance from
-        if (distanceSquared <= transform.localScale.x * 0.8) {
+        if (distanceSquared <= transform.localScale.x * 2) {
             vect += difference.normalized / Mathf.Max(distanceSquared, 0.01f); // Prevent division by extremely small values
         }
     }
@@ -99,7 +85,7 @@ private Vector3 calcSeperationVector() {
         Vector3 vect = Vector3.zero;
         //loop through the registered neighbor boids
         foreach(GameObject gameObj in fishInRange) {
-            float angle = Vector3.Angle(transform.forward, transform.position - gameObj.transform.position);
+            float angle = Vector3.Angle(transform.forward, (gameObj.transform.position - transform.position).normalized);
             if(angle <= 90) { // Check if within 90 degrees of the forward direction, 180 degree field of view
                 vect += gameObj.transform.position;
             }
@@ -116,17 +102,17 @@ private Vector3 calcSeperationVector() {
         Vector3 vect = Vector3.zero;
         //loop through the neigboring boids
         foreach(GameObject gameObj in fishInRange) {
-            float angle = Vector3.Angle(transform.forward, transform.position - gameObj.transform.position);
+            float angle = Vector3.Angle(transform.forward, (gameObj.transform.position - transform.position).normalized);
             //check if neighbor is within the 180 degeree field of view of the boid
-            //if it is then add its velocity to the velocity the boid will need to catch up to
+            // if it is then add its velocity to the velocity the boid will need to catch up to
             if(angle <= 90) {
                 BoidMovement boid = gameObj.GetComponent<BoidMovement>();
-                vect += boid.getAgentVelocity(); // Add nearby agent velocity
+                vect += boid.getAgentVelocity();  
             }
         }
         if (fishInRange.Count > 0) {
-            vect /= fishInRange.Count; // Average the velocities
-            vect -= velocity; // Adjust by the agent's own velocity
+            vect /= fishInRange.Count + 1; // Average the velocities
+            vect -= velocity;
         }
         return vect;
     }
@@ -159,17 +145,21 @@ private Vector3 calcSeperationVector() {
             velocity.y += turnFac;
         }
         //when position is more than the specfied range for back
-        if(pos.z > sceneMngr.getBack()){
-            velocity.z -= turnFac;
+        if(pos.z < sceneMngr.getBack()){
+            velocity.z += turnFac;
         }
         //when position is more than the specified range for front
-        if(pos.z < sceneMngr.getFront()){
-            velocity.z += turnFac;
+        if(pos.z > sceneMngr.getFront()){
+            velocity.z -= turnFac;
         }
     }
     // used to get the value of the velocity of the boid
     public Vector3 getAgentVelocity(){
-        return velocity;
+        return this.velocity;
+    }
+
+    public void setAgentVelocity(Vector3 velocity){
+        this.velocity = velocity;
     }
     //used to set the value of the biasdirection
     public void setBiasDirection(Vector3 dir){

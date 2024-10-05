@@ -1,6 +1,6 @@
 using UnityEngine;
 using ABMU.Core;
-using System.Collections.Generic;
+using System.Collections;
 public class FeedController : AbstractController
 {
     [SerializeField] private GameObject feedObject;
@@ -13,12 +13,17 @@ public class FeedController : AbstractController
     }
 
     public void generateFeeds (int count, Vector3 pos){
+        StartCoroutine(generateFeedAndCreateSplash(count, pos));
+    }
+
+    IEnumerator generateFeedAndCreateSplash(int count, Vector3 pos){
         float top = sceneMngrState.getTop();
         for(int i =0; i < count; i++){
             GameObject a = Instantiate(feedObject);
             a.GetComponent<FeedAgent>().Init();
             a.transform.position = new Vector3(Random.Range(pos.x -1, pos.x + 1), top, Random.Range(pos.z -1, pos.z + 1));
         }
+        yield return new WaitForEndOfFrame();
         sceneMngrState.createSplash(1000, pos);
     }
 }

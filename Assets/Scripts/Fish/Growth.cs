@@ -101,6 +101,8 @@ public class Growth : AbstractAgent
             boid.setHasBias(true);
             //boid should speed up approaching the food
             boid.setSpeedmultiplier(2);
+        }else{
+            feedObject = null;
         }
     }
     //approaches the detected food

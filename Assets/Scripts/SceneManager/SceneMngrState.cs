@@ -23,9 +23,8 @@ public class SceneMngrState : MonoBehaviour
     {
         //0 for feed
         //1 for fish 
-        status = 0;
+        status = 1;
         fishController = GameObject.Find("FishController").GetComponent<FishController>();
-        spawnFish();
     }
 
     public float getAvoidFactor(){

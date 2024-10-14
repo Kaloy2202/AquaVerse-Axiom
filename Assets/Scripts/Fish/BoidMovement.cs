@@ -22,18 +22,20 @@ public class BoidMovement : AbstractAgent
 
     //moves the boid based on the value of the velocity property
     private void Move(){
+        velocity += calcAlignmentVector() * sceneMngr.getMatchingFactor();
+        velocity += calcSeperationVector() * sceneMngr.getAvoidFactor();
+        velocity += calcCohesionVector() * sceneMngr.getCenteringFactor();
         // if there is a bias e.g., there is a food source, prioritize going to the biased position
         if(hasBias){
             calcBiasEffect();
         }
-        velocity += calcSeperationVector() * sceneMngr.getAvoidFactor();
-        velocity += calcAlignmentVector() * sceneMngr.getMatchingFactor();
-        velocity += calcCohesionVector() * sceneMngr.getCenteringFactor();
         //seperation is important for the movement
 
         // apply only 80% percent of the direction in the y axis
         //prevents too much movement of the boid along the y axis
         velocity.y *= 0.8f;
+        //normalize the value
+        velocity = velocity.normalized;
         //check if boid is outside of the specified pond area
         //mechanic for preventing the boid from going out the area and provide a smooth transition
         agentOutsideOfPond();
@@ -55,7 +57,7 @@ public class BoidMovement : AbstractAgent
     void OnTriggerEnter(Collider collider){
         //adds neighbor 
         // used to efficiently manage the neighbors and keeps the number of neighbors to limited number for the sake of performance
-        if(collider.CompareTag("fish") && !fishInRange.Contains(collider.gameObject)){
+        if(collider.CompareTag("fish") && !fishInRange.Contains(collider.gameObject) && fishInRange.Count< 10){
             fishInRange.Add(collider.gameObject);
         }
     }
@@ -78,7 +80,7 @@ private Vector3 calcSeperationVector() {
             vect += difference.normalized / Mathf.Max(distanceSquared, 0.01f); // Prevent division by extremely small values
         }
     }
-    return vect;
+    return vect.normalized;
 }
     //calculates the amount of adjustment the boid will take to center itself within the mass of neighbor boids
     private Vector3 calcCohesionVector() {
@@ -95,7 +97,7 @@ private Vector3 calcSeperationVector() {
             vect /= fishInRange.Count; // Average position
             vect -= transform.position; // Steer towards the center of mass
         }
-        return vect;
+        return vect.normalized;
     }
     //calculates the amount of adjustment the boid will make to keep up with the neighbors velocity
     private Vector3 calcAlignmentVector() {
@@ -114,7 +116,7 @@ private Vector3 calcSeperationVector() {
             vect /= fishInRange.Count + 1; // Average the velocities
             vect -= velocity;
         }
-        return vect;
+        return vect.normalized;
     }
     //calculates the bias in direction of the boid
     //used when there is an event that will change the movement of the boid, such as when food is found

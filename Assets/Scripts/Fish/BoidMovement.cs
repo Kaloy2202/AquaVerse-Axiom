@@ -22,18 +22,20 @@ public class BoidMovement : AbstractAgent
 
     //moves the boid based on the value of the velocity property
     private void Move(){
+        velocity += calcAlignmentVector() * sceneMngr.getMatchingFactor();
+        velocity += calcSeperationVector() * sceneMngr.getAvoidFactor();
+        velocity += calcCohesionVector() * sceneMngr.getCenteringFactor();
         // if there is a bias e.g., there is a food source, prioritize going to the biased position
         if(hasBias){
             calcBiasEffect();
         }
-        velocity += calcSeperationVector() * sceneMngr.getAvoidFactor();
-        velocity += calcAlignmentVector() * sceneMngr.getMatchingFactor();
-        velocity += calcCohesionVector() * sceneMngr.getCenteringFactor();
         //seperation is important for the movement
 
         // apply only 80% percent of the direction in the y axis
         //prevents too much movement of the boid along the y axis
         velocity.y *= 0.8f;
+        //normalize the value
+        velocity = velocity.normalized;
         //check if boid is outside of the specified pond area
         //mechanic for preventing the boid from going out the area and provide a smooth transition
         agentOutsideOfPond();
@@ -55,7 +57,7 @@ public class BoidMovement : AbstractAgent
     void OnTriggerEnter(Collider collider){
         //adds neighbor 
         // used to efficiently manage the neighbors and keeps the number of neighbors to limited number for the sake of performance
-        if(collider.CompareTag("fish") && !fishInRange.Contains(collider.gameObject)){
+        if(collider.CompareTag("fish") && !fishInRange.Contains(collider.gameObject) && fishInRange.Count< 10){
             fishInRange.Add(collider.gameObject);
         }
     }

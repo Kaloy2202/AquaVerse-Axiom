@@ -62,6 +62,7 @@ public class Growth : AbstractAgent
         //double check later
         FeedConversionRatio = 0.5f;
     }
+
     //behavior of fish when eating
     void Eat(){
         //if hungry, make the fish be able to detect food
@@ -72,7 +73,8 @@ public class Growth : AbstractAgent
             detectFood();
         //if there is food object
         //fish has found food
-        }if(feedObject != null){
+        }
+        if(feedObject != null){
             //approach the food
             gotoFood();
         //fish is near the food, eat 
@@ -91,17 +93,35 @@ public class Growth : AbstractAgent
         //get the list of gameobjects on the food layer
         Collider[] feed = Physics.OverlapSphere(transform.position, 10, sceneMngr.getFoodLayer());
         //if there is food in the surrounding
-        if(feed.Count() > 0){
-            //set the first one on the array as the feed object
-            //randomizes the feedobject as Physics.Overlap does not sort the results based on distance
-            feedObject = feed[0].gameObject;
-            //set the bias direction
-            boid.setBiasDirection(feedObject.gameObject.transform.position);
-            //let the boid know that it should prioritize the bias
-            boid.setHasBias(true);
-            //boid should speed up approaching the food
-            boid.setSpeedmultiplier(2);
-        }else{
+        if (feed.Length > 0)
+        {
+            // Initialize variables to track the nearest feed
+            GameObject nearestFeed = null;
+            float minDistance = float.MaxValue;
+
+            // Iterate through the first 10 elements or all elements if less than 10 exist
+            int limit = Mathf.Min(feed.Length, 10);
+            for (int i = 0; i < limit; i++)
+            {
+                float distance = Vector3.Distance(transform.position, feed[i].transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestFeed = feed[i].gameObject;
+                }
+            }
+
+            // If a nearest feed is found, update the boid's behavior
+            if (nearestFeed != null)
+            {
+                feedObject = nearestFeed;
+                boid.setBiasDirection(feedObject.transform.position);
+                boid.setHasBias(true);
+                boid.setSpeedmultiplier(2); // Speed up when approaching the food
+            }
+        }
+        else
+        {
             feedObject = null;
         }
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -10,10 +11,10 @@ public class PlayerStats : MonoBehaviour
     public int money = 150000;
 
     //UI elements to display the stats
-    public Text levelText;
-    public Text experienceText;
-    public Text moneyText;
-    public Text titleText;
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI experienceText;
+    public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI titleText;
 
     // Start is called before the first frame update
     void Start()
@@ -73,8 +74,8 @@ public class PlayerStats : MonoBehaviour
     {
         levelText.text = "Level: " + level;
         experienceText.text = "XP: " + experience + "/" + experienceToNextLevel;
-        titleText.text = "Title: " + title;
-        moneyText.text = "Money: " + money;
+        titleText.text = title;
+        moneyText.text = "" + money;
     }
 
     //Method to add money

@@ -5,7 +5,7 @@ using System;
 public class CustomTimer : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
-    private float secondsPerDay = 360f;
+    private float secondsPerDay = 240f;
     private float timer = 0f;
     private int days = 0;
     private int hours = 0;

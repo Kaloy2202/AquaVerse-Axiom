@@ -7,6 +7,8 @@ TagManager:
   - feed
   - fish
   - triggerTag
+  - CinemachineTarget
+  - InspectText
   layers:
   - Default
   - TransparentFX

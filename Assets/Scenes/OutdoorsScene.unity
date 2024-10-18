@@ -2847,7 +2847,7 @@ GameObject:
   - component: {fileID: 636089105}
   m_Layer: 6
   m_Name: inspectText
-  m_TagString: InspectText
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3021,7 +3021,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3256,7 +3256,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -46, y: 432}
+  m_AnchoredPosition: {x: -46, y: 385}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &690038682 stripped
@@ -6598,7 +6598,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1673089198
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7550,10 +7550,9 @@ GameObject:
   - component: {fileID: 1839217617}
   - component: {fileID: 1839217618}
   - component: {fileID: 1839217619}
-  - component: {fileID: 1839217620}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: triggerTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7650,20 +7649,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1839217620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839217615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16932e47c8f20174794bb5c07a7bee52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiImageElement: {fileID: 1673089199}
-  triggerTag: InspectText
 --- !u!1 &1858923573 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100008, guid: 37804f44fb6382743bfc0c7778484693,

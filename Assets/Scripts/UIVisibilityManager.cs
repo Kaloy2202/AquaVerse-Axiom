@@ -6,6 +6,7 @@ public class UIVisibilityManager : MonoBehaviour
     public Image uiImageElement;
     public string triggerTag = "InspectText";
     private bool isInTrigger = false;
+    private bool isUIVisible = false;
 
     private void Start()
     {
@@ -18,12 +19,14 @@ public class UIVisibilityManager : MonoBehaviour
 
     private void Update()
     {
-        // Check if player is in trigger zone and pressing F
-        if (isInTrigger && Input.GetKey(KeyCode.F))
+        // Check if player is in trigger zone and presses F
+        if (isInTrigger && Input.GetKeyDown(KeyCode.F))
         {
-            ShowUIElement();
+            ToggleUIElement();
         }
-        else
+        
+        // Hide UI element if player leaves trigger zone
+        if (!isInTrigger && isUIVisible)
         {
             HideUIElement();
         }
@@ -45,16 +48,18 @@ public class UIVisibilityManager : MonoBehaviour
         }
     }
 
-    private void ShowUIElement()
+    private void ToggleUIElement()
     {
+        isUIVisible = !isUIVisible;
         if (uiImageElement != null)
         {
-            uiImageElement.gameObject.SetActive(true);
+            uiImageElement.gameObject.SetActive(isUIVisible);
         }
     }
 
     private void HideUIElement()
     {
+        isUIVisible = false;
         if (uiImageElement != null)
         {
             uiImageElement.gameObject.SetActive(false);

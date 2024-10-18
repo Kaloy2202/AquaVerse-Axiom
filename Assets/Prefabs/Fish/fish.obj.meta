@@ -8,18 +8,19 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: _defaultMat
-    second: {fileID: -876546973899608171, guid: b534560b691036847a6f86ba3fe24b7f,
+    second: {fileID: -876546973899608171, guid: 4b90fa5b128e2b444840c9778a32e5f1,
       type: 3}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: greyLight
-    second: {fileID: 2100000, guid: ca9ba9e293ddea7419d0b29bb4166b48, type: 2}
+    second: {fileID: 2100000, guid: 0d7ca8495341bc04da53c6b03a244ec5, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: pink
-    second: {fileID: 2100000, guid: aadd5a709a48466c887296bb5b1b8110, type: 2}
+    second: {fileID: -876546973899608171, guid: afe44cbbbd7f19d4b933d5c98d2ea8ff,
+      type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

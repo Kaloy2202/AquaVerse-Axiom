@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class PlayerStats : MonoBehaviour
@@ -10,29 +9,27 @@ public class PlayerStats : MonoBehaviour
     public string title = "Beginner";
     public int money = 150000;
 
-    //UI elements to display the stats
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI experienceText;
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI titleText;
 
-    // Start is called before the first frame update
+    public RewardPopupManager rewardPopupManager; // Reference to the RewardPopupManager
+
     void Start()
     {
         UpdateUI();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // For testing purpooses
+        // For testing purposes
         if (Input.GetKeyDown(KeyCode.E))
         {
             GainExperience(10);
         }
     }
 
-    //Metood to handle gaining experience
     public void GainExperience(int amount)
     {
         experience += amount;
@@ -43,10 +40,8 @@ public class PlayerStats : MonoBehaviour
         }
 
         UpdateUI();
-
     }
 
-    //Method to hhandle leveling up
     void LevelUp()
     {
         experience -= experienceToNextLevel;
@@ -54,7 +49,13 @@ public class PlayerStats : MonoBehaviour
         experienceToNextLevel += 100;
         UpdateTitle();
 
-        //add bonuses here
+        // Show the level-up popup using RewardPopupManager
+        if (rewardPopupManager != null)
+        {
+            rewardPopupManager.ShowRewardPopup("Congratulations! You leveled up to Level " + level + "!");
+        }
+
+        UpdateUI();
     }
 
     void UpdateTitle()
@@ -65,11 +66,8 @@ public class PlayerStats : MonoBehaviour
             title = "Intermediate";
         else if (level >= 10)
             title = "Expert";
-
-        UpdateUI();
     }
 
-    //method to handle UI update
     void UpdateUI()
     {
         levelText.text = "Level: " + level;
@@ -78,7 +76,6 @@ public class PlayerStats : MonoBehaviour
         moneyText.text = "" + money;
     }
 
-    //Method to add money
     public void AddMoney(int amount)
     {
         money += amount;

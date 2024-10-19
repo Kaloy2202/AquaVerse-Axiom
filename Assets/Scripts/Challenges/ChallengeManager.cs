@@ -5,6 +5,7 @@ public class ChallengeManager : MonoBehaviour
 {
     public List<Challenge> activeChallenges = new List<Challenge>();
     private PlayerStats playerStats;
+    public RewardPopupManager rewardPopupManager; // Reference to the RewardPopupManager
 
     void Start()
     {
@@ -12,7 +13,7 @@ public class ChallengeManager : MonoBehaviour
         playerStats = FindObjectOfType<PlayerStats>();
 
         // Example of adding challenges
-        activeChallenges.Add(new Challenge("Feed 10 Fish", "Feed your fish 10 times", 10, 100, 500));
+        activeChallenges.Add(new Challenge("Feed 10 Fish", "Feed your fish 10 times", 10, 100, 500, rewardPopupManager)); // Pass RewardPopupManager here
     }
 
     // Call this to update challenge progress

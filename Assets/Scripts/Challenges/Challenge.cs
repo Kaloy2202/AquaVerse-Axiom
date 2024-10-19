@@ -12,7 +12,7 @@ public class Challenge
     public int moneyReward;
     public bool isCompleted;
 
-    public Challenge(string name, string desc, int required, int xpReward, int moneyReward)
+    public Challenge(string name, string desc, int required, int xpReward, int moneyReward, RewardPopupManager popupManager)
     {
         challengeName = name;
         description = desc;

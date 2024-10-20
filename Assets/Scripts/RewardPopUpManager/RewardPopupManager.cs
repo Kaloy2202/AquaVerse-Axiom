@@ -8,10 +8,10 @@ public class RewardPopupManager : MonoBehaviour
     public GameObject rewardPopup; // The popup UI element
     public TextMeshProUGUI rewardText; // Text for the reward message
 
-    void Start()
-    {
-        ShowRewardPopup("Test: Popup is working!");
-    }
+    //void Start()
+    //{
+    //    ShowRewardPopup("Test: Popup is working!");
+    //}
 
     // Method to show the popup
     public void ShowRewardPopup(string rewardMessage)

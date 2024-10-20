@@ -16936,6 +16936,75 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1464428516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1464428518}
+  - component: {fileID: 1464428517}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1464428517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464428516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0193462cb1f0b134ca5204a7dad874bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: AmbientSound
+    clip: {fileID: 8300000, guid: 45904e98efbf2a74f895ed585f8c946b, type: 3}
+    volume: 0.51
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: DaytimeMusic
+    clip: {fileID: 8300000, guid: 83f95142dc9196745b22c87a9fa91896, type: 3}
+    volume: 0.06
+    pitch: 0.5
+    loop: 0
+    source: {fileID: 0}
+  - name: NighttimeMusic
+    clip: {fileID: 8300000, guid: 25a9956c55aca0743aebbb433605484a, type: 3}
+    volume: 0
+    pitch: 0.1
+    loop: 0
+    source: {fileID: 0}
+  - name: Footstep
+    clip: {fileID: 8300000, guid: 6f344c93a9337684995c262534fa85f1, type: 3}
+    volume: 0.41
+    pitch: 0.5
+    loop: 0
+    source: {fileID: 0}
+--- !u!4 &1464428518
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464428516}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 50.66753, y: 18.786957, z: 63.59607}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1473338055
 GameObject:
   m_ObjectHideFlags: 0
@@ -20114,6 +20183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sun: {fileID: 157207113}
   secondsInAFullDay: 240
+  audioManager: {fileID: 1464428517}
 --- !u!4 &1748256531
 Transform:
   m_ObjectHideFlags: 0
@@ -25565,3 +25635,4 @@ SceneRoots:
   - {fileID: 1748256531}
   - {fileID: 1685274327}
   - {fileID: 1913014212}
+  - {fileID: 1464428518}

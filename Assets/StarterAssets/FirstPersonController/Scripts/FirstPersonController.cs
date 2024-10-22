@@ -134,7 +134,7 @@ namespace StarterAssets
                 footstepTimer -= Time.deltaTime; // Decrease timer by delta time
 
                 // If timer reaches 0, play footstep sound and reset timer
-                if (footstepTimer <= 0f)
+                if (footstepTimer <= 0f && audioManager != null)
                 {
                     audioManager.Play("Footstep"); // Play footstep sound
                     footstepTimer = footstepInterval; // Reset the timer

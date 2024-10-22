@@ -10,12 +10,15 @@ public class DayNightCycle : MonoBehaviour
     private float _sunInitialIntensity;    // Store the initial sun intensity
     private bool isDaytime = true;         // Track if it's currently daytime
 
+    private SceneMngrState sceneMngrState;
+
     void Start()
     {
         _sunInitialIntensity = sun.intensity;  // Store the sun's starting intensity
-
+        sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
+        _currentTimeOfDay = sceneMngrState.getTimeInHours();
         // Start with playing daytime music
-        audioManager.Play("AmbientSound");
+        // audioManager.Play("AmbientSound");
     }
 
     void Update()
@@ -33,7 +36,7 @@ public class DayNightCycle : MonoBehaviour
         UpdateSun();
 
         // Check if we need to switch music (day to night, or night to day)
-        CheckTimeForMusicChange();
+        // CheckTimeForMusicChange();
     }
 
     void UpdateSun()
@@ -56,18 +59,18 @@ public class DayNightCycle : MonoBehaviour
         sun.intensity = _sunInitialIntensity * intensityMultiplier;
     }
 
-    void CheckTimeForMusicChange()
-    {
-        // Define "daytime" between 6:00 and 18:00
-        if (_currentTimeOfDay >= 6f && _currentTimeOfDay < 18f && !isDaytime)
-        {
-            isDaytime = true; // Switch to day
-            audioManager.Play("DaytimeMusic"); // Play daytime music
-        }
-        else if ((_currentTimeOfDay < 6f || _currentTimeOfDay >= 18f) && isDaytime)
-        {
-            isDaytime = false; // Switch to night
-            audioManager.Play("NighttimeMusic"); // Play nighttime music
-        }
-    }
+    // void CheckTimeForMusicChange()
+    // {
+    //     // Define "daytime" between 6:00 and 18:00
+    //     if (_currentTimeOfDay >= 6f && _currentTimeOfDay < 18f && !isDaytime)
+    //     {
+    //         isDaytime = true; // Switch to day
+    //         audioManager.Play("DaytimeMusic"); // Play daytime music
+    //     }
+    //     else if ((_currentTimeOfDay < 6f || _currentTimeOfDay >= 18f) && isDaytime)
+    //     {
+    //         isDaytime = false; // Switch to night
+    //         audioManager.Play("NighttimeMusic"); // Play nighttime music
+    //     }
+    // }
 }

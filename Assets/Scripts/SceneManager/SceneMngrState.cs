@@ -15,6 +15,8 @@ public class SceneMngrState : MonoBehaviour
     [SerializeField] private LayerMask foodLayer;
     [SerializeField] private LayerMask fishLayer;
     [SerializeField] private int status;
+    [SerializeField] private float secondsPerDay;
+    private float timeInHours;
 
     private Vector3 gizPos;
     private FishController fishController;
@@ -128,5 +130,17 @@ public class SceneMngrState : MonoBehaviour
     //place in the pool in the future
     public Vector3 getPoolDimension(){
         return new Vector3(length, height, width);
+    }
+
+    public void setHour(float hour){
+        this.timeInHours = hour;
+    }
+
+    public float getTimeInHours(){
+        return this.timeInHours;
+    }
+
+    public float getSecondsPerHour(){
+        return (float) secondsPerDay/24;
     }
 }

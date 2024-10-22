@@ -3527,6 +3527,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   status: 1
+  secondsPerDay: 360
 --- !u!4 &268077982
 Transform:
   m_ObjectHideFlags: 0
@@ -11727,6 +11728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b375d2b6a3bf9c94c895c42dc2454534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingTime: 8
   timerText: {fileID: 685448168}
 --- !u!4 &957984590
 Transform:
@@ -20100,7 +20102,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1748256530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20115,6 +20117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sun: {fileID: 157207113}
   secondsInAFullDay: 240
+  audioManager: {fileID: 0}
 --- !u!4 &1748256531
 Transform:
   m_ObjectHideFlags: 0

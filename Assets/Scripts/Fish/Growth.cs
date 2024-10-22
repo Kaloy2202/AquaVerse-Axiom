@@ -1,6 +1,7 @@
 using UnityEngine;
 using ABMU.Core;
 using System;
+using System.Linq;
 using System.Collections;
 
 public class Growth : AbstractAgent
@@ -8,34 +9,58 @@ public class Growth : AbstractAgent
     private BoidMovement boid;
     private GameObject feedObject;
     private SceneMngrState sceneMngr;
-    private PoolManager poolManager;
     //eating
     private bool isEating;
     private float consumedFeed;
-    private float feedCap; //in grams
-    private float biteSize = 0.5f;
-    private bool isDigesting = false;
+    private float feedCap;
+    private float biteSize;
 
     //growth 
+    private float FeedConversionRatio; // typical FCR for Bangus: 1.5 to 2.0
+    private float Temperature; // water temperature in degrees Celsius, temperature of the water
+    private const float ME = 0.6f; // Metabolizable energy coefficient
+    private float FeedIntakeRatePerHour; // Feed intake rate per hour in grams
+    private float digestionRate;
+    private int age; //age in days
     private float weight;
-    private float highestWeightAttained;
-    //constants
-    private float averageAdultWeight = 800; //in grams
+    private float s;
+    private float t0;
+    private float baseIntakeRate;
+    private float optimalTemp;
 
+    //constants
+    float averageAdultWeight = 800; //in grams
     public override void Init(){
         base.Init();
         //reference to the boid movement script of the gameobject
         boid = GetComponent<BoidMovement>();
         //reference to the scene manager, the one that holds in-game/in-scene values
         sceneMngr = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
-        poolManager = GameObject.Find("PoolManager").GetComponent<PoolManager>();
-        weight = 50f; //starting weight
         //register the steppers
         CreateStepper(Eat);
         CreateStepper(Grow);
-
-        feedCap = calcMaxFeedIntake();
-        biteSize = weight * 0.02f;
+        //growth related
+        //rate of consumption of the fish
+        //create a function that accepts mass/size as parameter to calculate bite size
+        biteSize = 5;
+        //necessary for growth
+        //double check this later
+        s = 0.262f;
+        t0 = 69.8f;
+        //initial weight in grams
+        weight = 50;
+        //maximum amount of feed the fish can consume
+        //based on data, find it later
+        baseIntakeRate = weight *0.1f;
+        //optimal temperature for bangus
+        optimalTemp = 29;
+        //initial curent temperation
+        Temperature = 29;
+        //calculate the maximum feed the fish can consume 
+        calcFeedIntake();
+        //date based conversion ratio
+        //double check later
+        FeedConversionRatio = 0.5f;
     }
 
     //behavior of fish when eating
@@ -135,147 +160,65 @@ public class Growth : AbstractAgent
             //set the isEating to false
             //prevents further execution of this method
             isEating = false;
-            if(!isDigesting){
-                StartCoroutine(performDigestion());
-                isDigesting = true;
-            }
+            //perform asynchronous digestion
+            StartCoroutine(performDigestion());
         }
     }
+    //digests the feed consumed
+    //necessary for the growth of the fish
+    IEnumerator performDigestion(){
+        //execute only if fish has consumed feed and is not eating
+        while(consumedFeed > 0 && !isEating){
+            //calculate the digestion rate of the fish
+            calcDigestionRate();
+            //decrement the amount of consumed feed by the digestion rate
+            consumedFeed -= digestionRate;
+            //calculate the growth of the fish
+            calcGrowth();
+            //do this every one second (1 sec = 1 hour)
+            yield return new WaitForSeconds(1);
+        }
+        //update the maximum feed intake
+        calcFeedIntake();
+    }
+    //checks if the fish is hungry or not
     private bool isHungry(){
         //fish is hungry when thre is difference in consumed feed and feed cap
-        if(consumedFeed > feedCap/2){
-            return false;
-        }
-        return true;
+        return consumedFeed < feedCap;
+    }
+
+    //calculations
+    private void calcDigestionRate(){
+        //gram per hour
+        //amount of feed in grams that is digested by the fish in 1 hour
+        double weightFactor = Math.Pow(weight,s);
+        double tempFactor = Math.Exp(0.0806 * (20 -Temperature));
+        float dig = (float)(weight * Math.Pow(1/(t0 * weightFactor * tempFactor), 1/0.62));
+        digestionRate = dig;
+    }
+    private void calcFeedIntake() {
+        double exponent = -Math.Pow(Temperature - optimalTemp, 2) / Math.Pow(3, 2);
+        double tempFactor = Math.Exp(exponent);
+        //24 hour eating capacity
+        feedCap = (float)(weight/50 * tempFactor * baseIntakeRate); 
+        //one hour feeding capacity
+        FeedIntakeRatePerHour = feedCap/24;
+        biteSize = FeedIntakeRatePerHour; //divide the feed intake per hour to the number of bites it takes a fish to eat 1 gram of feed
+    }
+    //calculates the new weight of the fihs
+    private void calcGrowth(){
+        // the additional weight is the amount of digested feed in an hour time the feed conversion ratio
+        weight += digestionRate * FeedConversionRatio;
     }
 
     //visual growth
     private void Grow (){
-        float size = 2 * weight/averageAdultWeight;
-        if(size > 1){
-            size = 1;
-        }
-        if(size < transform.localScale.x){
-            Vector3 prev = transform.localScale;
-            transform.localScale = new Vector3(size, prev.y, prev.z);
-        }else{
-            transform.localScale = new Vector3(size, size, size);
-        }
+        //fish gameobject scales with weight
+        // transform.localScale = new Vector3(weight/averageAdultWeight,weight/averageAdultWeight, weight/averageAdultWeight);
     }
-    
-    //calculates the amount of energy used for metabolism
-    private float calcBasalMetabolism(float temperature){
-        //a, b, c and tempRef are species specific values
-        float a = 0.25f;
-        float b = 0.75f;
-        float c = 0.7f;
-        float tempRef = 28;
-        return (float)(a * Math.Pow(weight/1000, b) * Math.Exp(c * (temperature - tempRef)));
-    }
-
-    private float calcTempBaseMetabolism(float bmr, float temperature){
-        float q10 = 2;
-        float tempRef = 28;
-        return (float)(bmr * Math.Pow(q10, (temperature - tempRef)/10));
-    }
-
-    private float calcMetabolicCost(){
-        float temperature = poolManager.getPoolTemperature();
-        float bmr = calcBasalMetabolism(temperature);
-        float tempBaseMetabolism = calcTempBaseMetabolism(bmr, temperature);
-        return (float)(bmr + tempBaseMetabolism);
-    }
-
-    //amount of feeds digesed per hour
-    private float calcDigestionrate(){
-        //feedcap shoule be set first before calculating digestion rate
-        return feedCap/24;
-    }
-
-    private float calcFeedingRate(){
-        //returns percentage of body weight
-        float frBase = calcFRbase();
-        float tempDiff = (float)Math.Pow(poolManager.getPoolTemperature() - ((25+30)/2), 2);
-        float tempFactor = (float) Math.Exp(tempDiff/(2 * Math.Pow((30-25)/2, 2)));
-        return (float)(frBase * tempFactor)/100;
-    }
-
-    private float calcMaxFeedIntake(){
-        //calculates the amount of feed in grams
-        float feedingRate = calcFeedingRate();
-        return weight * feedingRate;
-    }
-
-    //returns the ideal feeding rate based on weight
-    private float calcFRbase(){
-        float frBase = weight switch{
-            <= 50 => 10,
-            > 50 and <=125 => 8,
-            > 125 and <= 200 => 6,
-            > 200 and <= 250 => 5.5f,
-            > 250 and  <=300 => 5,
-            > 300 and <= 400 => 4,
-            >400 and <= 500 => 3.5f,
-            > 500 => 2.5f,
-        };
-        return frBase;
-    }
-
-    private float calcTotalEnergyIntake(){
-        float digestionRate = calcDigestionrate();
-        if(digestionRate > consumedFeed){
-            digestionRate = consumedFeed;
-        }
-        consumedFeed -= digestionRate;
-        return digestionRate * 18792;
-    }
-
-    private float calcGrowth(){
-        float energyIntake = calcTotalEnergyIntake();
-        float metabolism = calcMetabolicCost();
-        if(!poolManager.isOxygenEnough(metabolism * 18792 * 0.2f)){
-            Destroy(this.gameObject);
-            return 0;
-        }
-        Debug.Log("energy for metabolism: " + metabolism * 18792);
-        float energyUsedPercentage = calcActivityEnergyPercentage();
-        float growthEnergy =  energyIntake - (metabolism * 18792) - (energyUsedPercentage * energyIntake);
-        //returns value of converted energy to mass
-        return growthEnergy/(10 * 4184);
-    }
-    
-    private float calcActivityEnergyPercentage(){
-        string poolStatus = poolManager.getPoolStatus();
-        switch (poolStatus){
-            case "calm":
-                return 0.12f;
-            case "mild":
-                return 0.2f;
-            case "stressed":
-                return 0.275f;
-        }
-        //just in case poolstatus is unset
-        return 0.12f;
-    }
-
-    IEnumerator performDigestion(){
-        while(true){
-            weight += 10 * calcGrowth();
-            if(weight > highestWeightAttained){
-                highestWeightAttained = weight;
-            }else{
-                if(weight <= highestWeightAttained * 0.5f){
-                    Destroy(this.gameObject);
-                    Debug.Log("dead");
-                    break;
-                }
-            }
-            feedCap = calcMaxFeedIntake();
-            biteSize = weight * 0.02f;
-            yield return new WaitForSeconds(1);
-            Debug.Log("weight: "+weight);
-        }
+    //caculates the speed/acceleration of the fish based on weight
+    public float getWeightBasedSpeedMultiplier(){
+        // not final
+        return 2 * weight /averageAdultWeight;
     }
 }
-
-

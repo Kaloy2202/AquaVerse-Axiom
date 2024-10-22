@@ -7,4 +7,5 @@ public class NPC : MonoBehaviour, IInteractable
         // Logic for interacting with the NPC
         Debug.Log("You are interacting with the NPC!");
     }
+    
 }

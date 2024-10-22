@@ -124,9 +124,9 @@ public class SceneMngrState : MonoBehaviour
         // Draw a wireframe sphere to visualize the OverlapSphere
         Gizmos.DrawWireSphere(gizPos, rad);
     }
-
-    private void spawnFish (){
-        Vector3 pos = new Vector3(Random.Range(getRight(), getLeft()), getTop(), Random.Range(getBack(), getFront()));
-        fishController.spawnFish(pos);
+    //temporary
+    //place in the pool in the future
+    public Vector3 getPoolDimension(){
+        return new Vector3(length, height, width);
     }
 }

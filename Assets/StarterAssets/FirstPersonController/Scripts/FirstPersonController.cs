@@ -74,6 +74,7 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
+
 		private bool IsCurrentDeviceMouse
 		{
 			get
@@ -95,18 +96,25 @@ namespace StarterAssets
 			}
 		}
 
-		private void Start()
+		public float footstepInterval = 1f;// Time between footsteps
+        private float footstepTimer = 0f;
+        private AudioManager audioManager; // Reference to AudioManager
+
+        private void Start()
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
+
+            // Reference to AudioManager
+            audioManager = FindObjectOfType<AudioManager>();
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
 
-			// reset our timeouts on start
-			_jumpTimeoutDelta = JumpTimeout;
+            // reset our timeouts on start
+            _jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
 		}
 
@@ -115,9 +123,26 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-		}
+            PlayFootstepSound(); // Call the footstep sound method
+        }
 
-		private void LateUpdate()
+        private void PlayFootstepSound()
+        {
+            // Check if player is grounded and moving
+            if (Grounded && _controller.velocity.magnitude > 0.1f)
+            {
+                footstepTimer -= Time.deltaTime; // Decrease timer by delta time
+
+                // If timer reaches 0, play footstep sound and reset timer
+                if (footstepTimer <= 0f)
+                {
+                    audioManager.Play("Footstep"); // Play footstep sound
+                    footstepTimer = footstepInterval; // Reset the timer
+                }
+            }
+        }
+
+        private void LateUpdate()
 		{
 			CameraRotation();
 		}

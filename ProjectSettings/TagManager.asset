@@ -9,11 +9,13 @@ TagManager:
   - triggerTag
   - CinemachineTarget
   - InspectText
+  - NPC
+  - Interactable
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - InteractableLayer
   - Water
   - UI
   - whatIsGround

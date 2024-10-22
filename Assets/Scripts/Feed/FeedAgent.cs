@@ -6,6 +6,8 @@ using System.Collections;
 
 public class FeedAgent : AbstractAgent
 {
+    //reference to the pool
+    PoolManager poolManager;
     private float content;
     private Rigidbody rb;
 
@@ -20,10 +22,11 @@ public class FeedAgent : AbstractAgent
         rb = GetComponent<Rigidbody>();
         //set the initial contenet
         //change in the future
-        content = 10;
+        content = 2;
         //create stepper
         CreateStepper(Behave);
 
+        poolManager = GameObject.Find("PoolManager").GetComponent<PoolManager>();
         SceneMngrState sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
         top = sceneMngrState.getTop();
         bottom = sceneMngrState.getBot();
@@ -31,6 +34,7 @@ public class FeedAgent : AbstractAgent
         right = sceneMngrState.getRight();
         front = sceneMngrState.getFront();
         back = sceneMngrState.getBack();
+        startDecay();
     }
     //determines the movement of the feed
     void Behave(){
@@ -88,5 +92,32 @@ public class FeedAgent : AbstractAgent
     public void applyForce(Vector3 forceSource, float forceRadius){
         Vector3 dir = calculateMagnitude(forceSource, forceRadius);
         rb.AddForce(dir);
+    }
+
+    private float calcFeedMassDecay(){
+        float nutrientLeach = content * 0.25f;
+        float decayRate = 0.15f * content;
+        return nutrientLeach + decayRate;
+    }
+
+    private void startDecay(){
+        StartCoroutine(destroyWhenNotEaten());
+    }
+    IEnumerator performDecay(){
+        float contentDeduction;
+        while(content > 0){
+            contentDeduction = calcFeedMassDecay();
+            content -= contentDeduction;
+            yield return new WaitForSeconds(15);
+        }
+    }
+
+    IEnumerator destroyWhenNotEaten(){  
+        yield return new WaitForSeconds(3f);
+        rb.useGravity = true;
+        rb.drag = 20f;
+        yield return new WaitForSeconds(3);
+        poolManager.updateExcessFeed(content);
+        Destroy(this.gameObject);
     }
 }

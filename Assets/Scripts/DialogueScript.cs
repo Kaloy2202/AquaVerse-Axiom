@@ -8,13 +8,17 @@ public class DialogueScript : MonoBehaviour
     public TextMeshProUGUI textDisplay;
     public string[] lines;
     public float textSpeed;
-
+    public Canvas questCanvas;
+    
     private int index;
     private Coroutine typingCoroutine;
+    private int numberOfLines;
 
     // Start is called before the first frame update
     void Start()
     {
+        questCanvas.gameObject.SetActive(false);
+        numberOfLines = lines.Length;
         textDisplay.text = "";
         StartDialogue();
     }
@@ -36,6 +40,13 @@ public class DialogueScript : MonoBehaviour
                     StopCoroutine(typingCoroutine);
                 }
                 textDisplay.text = lines[index];
+            }
+        }
+        if (index == numberOfLines - 1)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                questCanvas.gameObject.SetActive(true);
             }
         }
     }

@@ -1,15 +1,18 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
 {
     public float interactionRange = 3f;
     public LayerMask interactableLayer;
-    public Canvas canvas;
+    public Canvas NPCDialog;
+    public Canvas HouseDialog;
 
     void Start()
     {
         // Add debug log to confirm canvas starts disabled
-        canvas.gameObject.SetActive(false);
+        NPCDialog.gameObject.SetActive(false);
+        HouseDialog.gameObject.SetActive(false);
         Debug.Log("Canvas disabled on start");
     }
 
@@ -39,12 +42,14 @@ public class InteractionManager : MonoBehaviour
             if(hit.collider.CompareTag("NPC")) // Use CompareTag instead of tag ==
             {
                 Debug.Log("NPC tag detected, enabling canvas");
-                canvas.gameObject.SetActive(true);
+                NPCDialog.gameObject.SetActive(true);
             }
-            else
+            else if (hit.collider.CompareTag("Interactable"))
             {
-                Debug.Log("Hit object does not have NPC tag");
+                Debug.Log("Interactable tag detected, enabling canvas");
+                HouseDialog.gameObject.SetActive(true);
             }
+
         }
         else
         {

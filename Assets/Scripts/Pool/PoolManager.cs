@@ -12,10 +12,19 @@ public class PoolManager : MonoBehaviour
 
     private float dissolvedOxygenContent = 0;
 
+    //temperature
+    private float minPoolTemp = 24;
+    private float maxPoolTemp = 32;
+
+    //duration of one day in seconds
+    private float numberSecondsForHour;
+
     void Start(){
         sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
         dissolvedOxygenContent = calcDissolvedOxygenContent();//set the initial value for the dissolved oxygen content of the pool
         StartCoroutine(decomposeFeeds());
+        numberSecondsForHour = sceneMngrState.getNumberOfSecondsPerHour();
+        StartCoroutine(startDynamicTemp());
     }
 
     public float getPoolTemperature(){
@@ -90,6 +99,17 @@ public class PoolManager : MonoBehaviour
         return -((float) (changeInTemp/10) * 0.45f);
 
     }
-    
+        private void calcTemperature(){
+        float timeFactor = (float)(1 + Math.Cos(2 * Math.PI/24 * (sceneMngrState.getInGameTime() - 14)));
+        poolTemperature = minPoolTemp + ((maxPoolTemp - minPoolTemp) * (timeFactor/2));
+    }
+
+    IEnumerator startDynamicTemp(){
+        while(true){
+            calcTemperature();
+            Debug.Log("new temperature: " + poolTemperature );
+            yield return new WaitForSeconds(numberSecondsForHour);
+        }
+    }
     
 }

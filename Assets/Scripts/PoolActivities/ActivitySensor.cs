@@ -22,8 +22,8 @@ public class ActivitySensor : MonoBehaviour
     void Update()
     {
         int status = sceneMngrState.getStatus();
-            if(Input.GetMouseButtonDown(0)){
-                    Vector3? pos = inputManager.getMousePosition();
+        if(Input.GetMouseButtonDown(0)){
+            Vector3? pos = inputManager.getMousePosition();
             if(pos != null){
                 switch(status){
                     case 0:

@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,6 +39,21 @@ public class InputManager : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 100, placementLayer)){
             return hit.point;
+        }
+        return null;
+    }
+    
+    public PoolManager? getSelectedPool(){
+        Vector3 mousePos = Input.mousePosition;
+
+        mousePos.z = sceneCamera.nearClipPlane;
+
+        Ray ray = sceneCamera.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, 100, placementLayer)){
+            if(hit.collider != null && hit.collider.gameObject != null){
+                return hit.collider.gameObject.GetComponent<PoolManager>();
+            }
         }
         return null;
     }

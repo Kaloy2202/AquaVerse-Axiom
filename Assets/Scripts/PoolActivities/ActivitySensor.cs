@@ -23,18 +23,22 @@ public class ActivitySensor : MonoBehaviour
     {
         int status = sceneMngrState.getStatus();
         if(Input.GetMouseButtonDown(0)){
-            Vector3? pos = inputManager.getMousePosition();
-            if(pos != null){
-                switch(status){
-                    case 0:
-                        feedController.generateFeeds(100, (Vector3)pos);
-                        break;
-                    case 1:
-                        fishController.spawnFish((Vector3)pos);
-                        break;
-                }
-            }else{
-                Debug.Log("invalid area");
+            // Vector3? pos = inputManager.getMousePosition();
+            // if(pos != null){
+            //     switch(status){
+            //         case 0:
+            //             feedController.generateFeeds(100, (Vector3)pos);
+            //             break;
+            //         case 1:
+            //             fishController.spawnFish((Vector3)pos);
+            //             break;
+            //     }
+            // }else{
+            //     Debug.Log("invalid area");
+            // }
+            PoolManager? pool = inputManager.getSelectedPool();
+            if(pool != null){
+                fishController.spawnFish(pool.getCenter(), pool.getDimensions());
             }
         }
     }

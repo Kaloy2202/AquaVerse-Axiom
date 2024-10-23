@@ -146,28 +146,28 @@ private Vector3 calcSeperationVector() {
         //the amount of rotation to apply to the boid to prevent it from going outside of range
         float turnFac = sceneMngr.getRotateFactor();
         //when position is outside of specified range for right
-        if(pos.x > sceneMngr.getRight()){
+        if(pos.x > right){
             velocity.x -= turnFac;
         }
         //when position is more than the specified range for left
-        if(pos.x < sceneMngr.getLeft()){
+        if(pos.x < left){
             velocity.x += turnFac;
         }
         //when position is more than the specified range for top
         //bigger penalty here to prevent the boid from going outside of water
-        if(pos.y > sceneMngr.getTop()){
+        if(pos.y > top){
             velocity.y -= 0.5f;
         }
         //when position is more than the specified range for bot
-        if(pos.y < sceneMngr.getBot()){
+        if(pos.y < bottom){
             velocity.y += turnFac;
         }
         //when position is more than the specfied range for back
-        if(pos.z < sceneMngr.getBack()){
+        if(pos.z < back){
             velocity.z += turnFac;
         }
         //when position is more than the specified range for front
-        if(pos.z > sceneMngr.getFront()){
+        if(pos.z > front){
             velocity.z -= turnFac;
         }
     }

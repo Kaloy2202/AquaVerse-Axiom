@@ -13,7 +13,7 @@ public class FishController : AbstractController
         sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
     }
 
-    public void spawnFish(Vector3 pos){
+    public void spawnFish(Vector3 pos, Vector3 dimension){
         float top = sceneMngrState.getTop();
         Vector3 loc, dir;
         BoidMovement mov;
@@ -26,6 +26,7 @@ public class FishController : AbstractController
 
             a.transform.position = loc;
             mov = a.GetComponent<BoidMovement>();
+            mov.setBounds(pos, dimension);
             mov.setAgentVelocity(dir.normalized);
         }
         

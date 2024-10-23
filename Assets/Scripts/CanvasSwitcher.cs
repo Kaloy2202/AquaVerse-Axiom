@@ -5,14 +5,15 @@ public class CanvasSwitcher : MonoBehaviour
 {
     public Canvas inGameUI;
     public Canvas miniGameUI;
-    public Button switchButton;
+    public Canvas storeUI;
+    public Button miniGameButton;
 
     private void Start()
     {
         // Ensure the button has a click listener
-        if (switchButton != null)
+        if (miniGameButton != null)
         {
-            switchButton.onClick.AddListener(SwitchCanvas);
+            miniGameButton.onClick.AddListener(() => SwitchCanvas(miniGameUI));
         }
         else
         {
@@ -36,17 +37,21 @@ public class CanvasSwitcher : MonoBehaviour
         // Check for F1 key press
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            SwitchCanvas();
+            SwitchCanvas(miniGameUI);
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            SwitchCanvas(storeUI);
         }
     }
 
-    public void SwitchCanvas()
+    public void SwitchCanvas(Canvas canvas)
     {
-        if (inGameUI != null && miniGameUI != null)
+        if (inGameUI != null && canvas != null)
         {
             // Toggle the active state of each canvas
             inGameUI.gameObject.SetActive(!inGameUI.gameObject.activeSelf);
-            miniGameUI.gameObject.SetActive(!miniGameUI.gameObject.activeSelf);
+            canvas.gameObject.SetActive(!canvas.gameObject.activeSelf);
         }
     }
 }

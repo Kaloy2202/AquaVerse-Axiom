@@ -27,65 +27,82 @@ public class SceneMngrState : MonoBehaviour
         fishController = GameObject.Find("FishController").GetComponent<FishController>();
     }
 
-    public float getAvoidFactor(){
+    public float getAvoidFactor()
+    {
         return avoidFactor;
     }
 
-    public float getMatchingFactor(){
+    public float getMatchingFactor()
+    {
         return matchingFactor;
     }
 
-    public float getCenteringFactor(){
+    public float getCenteringFactor()
+    {
         return centeringFactor;
     }
 
-    public float getMinSpeed(){
+    public float getMinSpeed()
+    {
         return minSpeed;
     }
 
-    public float getMaxSpeed(){
+    public float getMaxSpeed()
+    {
         return maxSpeed;
     }
 
-    public float getRotateFactor(){
+    public float getRotateFactor()
+    {
         return rotateFactor;
     }
 
-    public float getTop(){
-        return center.y + height/2;
+    public float getTop()
+    {
+        return center.y + height / 2;
     }
-    public float getBot(){
-        return center.y - height/2;
+    public float getBot()
+    {
+        return center.y - height / 2;
     }
-    public float getLeft(){
-        return center.x - length/2;
+    public float getLeft()
+    {
+        return center.x - length / 2;
     }
-    public float getRight(){
-        return center.x + length/2;
+    public float getRight()
+    {
+        return center.x + length / 2;
     }
-    public float getFront(){
-        return center.z + width/2;
+    public float getFront()
+    {
+        return center.z + width / 2;
     }
-    public float getBack(){
-        return center.z - width/2;
+    public float getBack()
+    {
+        return center.z - width / 2;
     }
-    public LayerMask getFoodLayer(){
+    public LayerMask getFoodLayer()
+    {
         return this.foodLayer;
     }
-    public float getBiasFactor(){
-        return  biasFactor;
+    public float getBiasFactor()
+    {
+        return biasFactor;
     }
 
-    public void setStatus(int value){
+    public void setStatus(int value)
+    {
         this.status = value;
     }
-    public int getStatus(){
+    public int getStatus()
+    {
         return status;
     }
     //creates splash in the water
     //requires mass, the mass of object that caused the splash
     //position, center of the position where the splash will occur
-    public void createSplash(float mass, Vector3 pos){
+    public void createSplash(float mass, Vector3 pos)
+    {
         gizPos = pos;
         //calculate the radius of the splash
         float radius = calculateSplashRadius(mass);
@@ -94,9 +111,11 @@ public class SceneMngrState : MonoBehaviour
         Collider[] feeds = Physics.OverlapSphere(pos, radius, foodLayer);
         //reference to the FeedAgent script of the feed
         FeedAgent movement;
-        foreach(Collider coll in feeds){
+        foreach (Collider coll in feeds)
+        {
             movement = coll.gameObject.GetComponent<FeedAgent>();
-            if(movement){
+            if (movement)
+            {
                 //calculate the force of the splash based on the radius and the distance from the center
                 movement.applyForce(pos, radius);
             }
@@ -112,7 +131,7 @@ public class SceneMngrState : MonoBehaviour
         }
 
         // Calculate the splash radius using the formula R = k * m^(1/3)
-        float radius = Mathf.Pow(mass/800, 1f / 3f);
+        float radius = Mathf.Pow(mass / 800, 1f / 3f);
         return radius;
     }
 
@@ -124,9 +143,10 @@ public class SceneMngrState : MonoBehaviour
         // Draw a wireframe sphere to visualize the OverlapSphere
         Gizmos.DrawWireSphere(gizPos, rad);
     }
-
-    private void spawnFish (){
-        Vector3 pos = new Vector3(Random.Range(getRight(), getLeft()), getTop(), Random.Range(getBack(), getFront()));
-        fishController.spawnFish(pos);
+    //temporary
+    //place in the pool in the future
+    public Vector3 getPoolDimension()
+    {
+        return new Vector3(length, height, width);
     }
 }

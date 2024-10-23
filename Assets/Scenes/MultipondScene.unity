@@ -7825,7 +7825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &394574325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47997,7 +47997,7 @@ GameObject:
   - component: {fileID: 5273480294991505268}
   m_Layer: 3
   m_Name: HumanMale_Character
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

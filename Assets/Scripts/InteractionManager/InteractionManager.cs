@@ -44,9 +44,9 @@ public class InteractionManager : MonoBehaviour
                 Debug.Log("NPC tag detected, enabling canvas");
                 NPCDialog.gameObject.SetActive(true);
             }
-            else if (hit.collider.CompareTag("Interactable"))
+            else if (hit.collider.CompareTag("Diary"))
             {
-                Debug.Log("Interactable tag detected, enabling canvas");
+                Debug.Log("Diary tag detected, enabling canvas");
                 HouseDialog.gameObject.SetActive(true);
             }
 

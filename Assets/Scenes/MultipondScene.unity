@@ -7162,6 +7162,50 @@ PrefabInstance:
       addedObject: {fileID: 1760819259}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bf1d632befaa430f9e80abc3dbb7364, type: 3}
+--- !u!1 &355911183
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 355911185}
+  - component: {fileID: 355911184}
+  m_Layer: 3
+  m_Name: DialogueManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &355911184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355911183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f83569aa8071849864111731cf261d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &355911185
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355911183}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.6570464, z: -0, w: 0.7538502}
+  m_LocalPosition: {x: 19.526, y: 3.85, z: 83.272}
+  m_LocalScale: {x: 2.3000004, y: 2.3, z: 2.3000004}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &359477244
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18427,7 +18471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 113d36f51d55c2c4a807a09ac76c1d69, type: 3}
       propertyPath: m_TagString
-      value: Interactable
+      value: Diary
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 113d36f51d55c2c4a807a09ac76c1d69, type: 3}
       propertyPath: m_Layer
@@ -26658,6 +26702,53 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0.61
   m_ShadowAngle: 0
+--- !u!1 &1233830858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1233830860}
+  - component: {fileID: 1233830859}
+  m_Layer: 3
+  m_Name: QuestManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1233830859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233830858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2496e5966135474bae5821704278040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueText: {fileID: 0}
+  questCanvas: {fileID: 0}
+  textSpeed: 0.05
+--- !u!4 &1233830860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233830858}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.6570464, z: 0, w: 0.7538502}
+  m_LocalPosition: {x: 19.526, y: 3.85, z: 83.272}
+  m_LocalScale: {x: 2.3000002, y: 2.3, z: 2.3000002}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1241515077 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100008, guid: 37804f44fb6382743bfc0c7778484693,
@@ -34418,17 +34509,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af634d2cb8a1f54c9d228fd02056b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textDisplay: {fileID: 2011768721}
-  lines:
-  - "Looks like we\u2019ve got a little statistical mystery here. \U0001F575\uFE0F\u200D\u2642\uFE0F
-    This distribution table doesn\u2019t seem quite right\u2026 \U0001F50D There\u2019s
-    an error hiding in plain sight, but only expert eyes will find it. \U0001F9D0 "
-  - "Can you spot what\u2019s wrong? \U0001F440 Drop your answer in the comments
-    if you do!"
-  - 'Pubmat by: Shan Rencis Fernandez'
-  - 'Caption by: Shankey Faith Bedia '
+  dialogueText: {fileID: 2011768721}
+  questCanvas: {fileID: 1686140211}
   textSpeed: 0
-  questCanvas: {fileID: 1940665158}
 --- !u!114 &1686140213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52365,6 +52448,8 @@ SceneRoots:
   - {fileID: 1913014212}
   - {fileID: 1464428518}
   - {fileID: 1020230057}
+  - {fileID: 355911185}
+  - {fileID: 1233830860}
   - {fileID: 5273480294991505265}
   - {fileID: 394574326}
   - {fileID: 3574287957722713440}

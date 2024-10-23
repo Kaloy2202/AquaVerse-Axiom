@@ -30,6 +30,14 @@ public class BuyerCard : MonoBehaviour
 
     public void UpdateTimerDisplay()
     {
-        timerText.text = Mathf.Ceil(buyer.Timer) + "s";
+        if (buyer != null && timerText != null)
+        {
+            timerText.text = Mathf.Ceil(buyer.Timer) + "s";
+        }
+        else
+        {
+            Debug.LogError("Buyer or Timer Text is not assigned!");
+        }
     }
+
 }

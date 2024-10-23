@@ -1083,7 +1083,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &72929999
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15139,7 +15139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inGameUI: {fileID: 72930002}
   miniGameUI: {fileID: 2126180703}
-  switchButton: {fileID: 1083117686}
+  storeUI: {fileID: 0}
+  miniGameButton: {fileID: 0}
 --- !u!4 &742197678
 Transform:
   m_ObjectHideFlags: 0
@@ -21299,6 +21300,7 @@ MonoBehaviour:
   interactableLayer:
     serializedVersion: 2
     m_Bits: 8
+  canvas: {fileID: 1686140211}
 --- !u!1001 &1029180376
 PrefabInstance:
   m_ObjectHideFlags: 0

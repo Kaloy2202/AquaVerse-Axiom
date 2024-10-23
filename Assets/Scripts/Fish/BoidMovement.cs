@@ -10,14 +10,30 @@ public class BoidMovement : AbstractAgent
     private float speedMultiplier = 1;
     private Vector3 biasDirection;
     private bool hasBias;
+
+    private float top, bottom, left, right, front, back;
+    private PoolManager poolManager;
     public override void Init()
     {
         base.Init();
         //reference to the scene manager
         sceneMngr = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
-        CreateStepper(Move); 
+        CreateStepper(Move);
         //initial speed multiplier
         speedMultiplier = 1;
+    }
+
+    public void setBounds(Vector3 center, Vector3 dimensions){
+        float x = dimensions.x/2;
+        float y = dimensions.y/2;
+        float z = dimensions.z/2;
+
+        top = center.y+ y;
+        bottom = center.y- y;
+        left = center.x -x;
+        right = center.x+x;
+        front = center.z + z;
+        back = center.z- z;
     }
 
     //moves the boid based on the value of the velocity property

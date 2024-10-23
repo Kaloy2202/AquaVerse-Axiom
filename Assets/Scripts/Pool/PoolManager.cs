@@ -12,6 +12,9 @@ public class PoolManager : MonoBehaviour
 
     private float dissolvedOxygenContent = 0;
 
+    [SerializeField] private Vector3 center;
+    [SerializeField] private Vector3 dimensions;
+
     void Start(){
         sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
         dissolvedOxygenContent = calcDissolvedOxygenContent();//set the initial value for the dissolved oxygen content of the pool
@@ -89,6 +92,14 @@ public class PoolManager : MonoBehaviour
         float changeInTemp = newTem - poolTemperature;
         return -((float) (changeInTemp/10) * 0.45f);
 
+    }
+
+    public Vector3 getCenter(){
+        return this.center;
+    }
+
+    public Vector3 getDimensions(){
+        return this.dimensions;
     }
     
     

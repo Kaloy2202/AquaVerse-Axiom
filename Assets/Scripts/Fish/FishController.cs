@@ -14,6 +14,7 @@ public class FishController : AbstractController
     }
 
     public void spawnFish(Vector3 pos, Vector3 dimension){
+        Debug.Log("spawning");
         float top = sceneMngrState.getTop();
         Vector3 loc, dir;
         BoidMovement mov;

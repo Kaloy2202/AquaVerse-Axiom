@@ -5794,6 +5794,7 @@ GameObject:
   - component: {fileID: 274667501}
   - component: {fileID: 274667503}
   - component: {fileID: 274667502}
+  - component: {fileID: 274667504}
   m_Layer: 10
   m_Name: Pond2
   m_TagString: Untagged
@@ -5964,6 +5965,20 @@ MonoBehaviour:
   volumePrority: 0
   transitionSize: 0.2
   absorbtionDistanceMultiplier: 1
+--- !u!114 &274667504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274667500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45755ec6d4190364ab5f103ab5bc7da6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  center: {x: 0, y: 0, z: 0}
+  dimensions: {x: 0, y: 0, z: 0}
 --- !u!1001 &278043088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22544,6 +22559,7 @@ GameObject:
   - component: {fileID: 1066975785}
   - component: {fileID: 1066975787}
   - component: {fileID: 1066975786}
+  - component: {fileID: 1066975788}
   m_Layer: 10
   m_Name: Pond3
   m_TagString: Untagged
@@ -22714,6 +22730,20 @@ MonoBehaviour:
   volumePrority: 0
   transitionSize: 0.2
   absorbtionDistanceMultiplier: 1
+--- !u!114 &1066975788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066975784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45755ec6d4190364ab5f103ab5bc7da6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  center: {x: 0, y: 0, z: 0}
+  dimensions: {x: 0, y: 0, z: 0}
 --- !u!1 &1073202396
 GameObject:
   m_ObjectHideFlags: 0
@@ -30313,6 +30343,7 @@ GameObject:
   - component: {fileID: 1485382917}
   - component: {fileID: 1485382919}
   - component: {fileID: 1485382918}
+  - component: {fileID: 1485382920}
   m_Layer: 10
   m_Name: Pond1
   m_TagString: Untagged
@@ -30483,6 +30514,20 @@ MonoBehaviour:
   volumePrority: 0
   transitionSize: 0.2
   absorbtionDistanceMultiplier: 1
+--- !u!114 &1485382920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485382916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45755ec6d4190364ab5f103ab5bc7da6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  center: {x: 0, y: 0, z: 0}
+  dimensions: {x: 0, y: 0, z: 0}
 --- !u!1001 &1486138725
 PrefabInstance:
   m_ObjectHideFlags: 0

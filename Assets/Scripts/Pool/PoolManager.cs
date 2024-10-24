@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
+    [SerializeField] private Vector3 center;
+    [SerializeField] private Vector3 dimensions;
     private SceneMngrState sceneMngrState;
     private float poolTemperature = 27;
     private string poolStatus = "calm";
@@ -11,9 +13,6 @@ public class PoolManager : MonoBehaviour
     private float excessFeed = 0; //amount of feed that is not eaten by fish in grams
 
     private float dissolvedOxygenContent = 0;
-
-    [SerializeField] private Vector3 center;
-    [SerializeField] private Vector3 dimensions;
 
     void Start(){
         sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();

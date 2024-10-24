@@ -24,12 +24,24 @@ public class BuyerCard : MonoBehaviour
         priceText.text = buyer.Price + " per kg";
         timerText.text = Mathf.Ceil(buyer.Timer) + "s";
 
-        supplyButton.onClick.AddListener(() => onSupply(buyer));
+        supplyButton.onClick.AddListener(() => destroyObject());
         denyButton.onClick.AddListener(() => onDeny(buyer));
     }
 
     public void UpdateTimerDisplay()
     {
-        timerText.text = Mathf.Ceil(buyer.Timer) + "s";
+        if (buyer != null && timerText != null)
+        {
+            timerText.text = Mathf.Ceil(buyer.Timer) + "s";
+        }
+        else
+        {
+            Debug.LogError("Buyer or Timer Text is not assigned!");
+        }
+    }
+
+    private void destroyObject()
+    {
+        Destroy(gameObject);
     }
 }

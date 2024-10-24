@@ -9,12 +9,15 @@ public class PlayerStats : MonoBehaviour
     public int experience = 0;
     public int experienceToNextLevel = 100;
     public string title = "Beginner";
-    public int money = 150000;
+    public float money = 150000;
+    public int totalStocks = 1000;
+    public int availableStocks = 1000;
 
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI experienceText;
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI titleText;
+    [SerializeField] private TMP_Text stockText;
 
     public RewardPopupManager rewardPopupManager; // Reference to the RewardPopupManager
 
@@ -84,6 +87,12 @@ public class PlayerStats : MonoBehaviour
             title = "Expert";
     }
 
+    public void AddStocks(int amount)
+    {
+        availableStocks += amount;
+        UpdateStockUI();
+    }
+
     void UpdateUI()
     {
         levelText.text = "Level: " + level;
@@ -96,5 +105,26 @@ public class PlayerStats : MonoBehaviour
     {
         money += amount;
         UpdateUI();
+    }
+
+    public void AddStock(int harvest)
+    {
+        totalStocks += harvest;
+    }
+
+    public void DeductStocks(int amount)
+    {
+        availableStocks -= amount;
+        UpdateStockUI();
+        if (availableStocks < 0)
+        {
+            availableStocks = 0;  // Ensure stocks don't go below 0
+        }
+    }
+
+    private void UpdateStockUI()
+    {
+        // Assuming you have a TMP_Text stockText field to update the UI
+        stockText.text = availableStocks.ToString() + " kg";
     }
 }

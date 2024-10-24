@@ -5,7 +5,7 @@ public class CanvasSwitcher : MonoBehaviour
 {
     public Canvas inGameUI;
     public Canvas miniGameUI;
-    public Canvas storeUI;
+    public Canvas fishDemandMarketUI;
     public Button miniGameButton;
 
     private void Start()
@@ -41,7 +41,7 @@ public class CanvasSwitcher : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            SwitchCanvas(storeUI);
+            SwitchCanvas(fishDemandMarketUI);
         }
     }
 

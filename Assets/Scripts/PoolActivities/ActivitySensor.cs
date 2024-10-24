@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#nullable enable
+using UnityEngine.EventSystems;
 
 public class ActivitySensor : MonoBehaviour
 {
@@ -18,11 +18,13 @@ public class ActivitySensor : MonoBehaviour
         feedController = GameObject.Find("FeedController").GetComponent<FeedController>();
         fishController = GameObject.Find("FishController").GetComponent<FishController>();
     }
+void Update()
+{
+    int status = sceneMngrState.getStatus();
 
-    // Update is called once per frame
-    void Update()
+    // Check if the pointer is over a UI element
+    if (EventSystem.current.IsPointerOverGameObject())
     {
-        int status = sceneMngrState.getStatus();
         if(Input.GetMouseButtonDown(0) && sceneMngrState.getCanDoPondActions()){
             // Vector3? pos = inputManager.getMousePosition();
             // if(pos != null){
@@ -44,5 +46,11 @@ public class ActivitySensor : MonoBehaviour
                 Debug.Log("there is no pool manager script found");
             }
         }
+        else
+        {
+            Debug.Log("Invalid area");
+        }
     }
+}
+
 }

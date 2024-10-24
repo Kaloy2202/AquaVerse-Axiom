@@ -80,6 +80,8 @@ public class PlayerStats : MonoBehaviour
             title = "Beginner";
         else if (level >= 5 && level < 10)
             title = "Intermediate";
+        else if (level >= 15)
+            title = "Aquaculture Tycoon";
         else if (level >= 10)
             title = "Expert";
     }

@@ -75,6 +75,7 @@ public class QuestManager : MonoBehaviour
     {
         if (quests.Count > 0)
         {
+            
             currentQuest = quests[0];
             currentDialogueIndex = 0;
             StartDialogue();

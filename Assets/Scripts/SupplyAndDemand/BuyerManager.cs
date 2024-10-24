@@ -13,7 +13,7 @@ public class BuyerManager : MonoBehaviour
     private FirstPersonController firstPersonController; // Reference to the PlayerStat script
 
     private List<Buyer> buyers = new List<Buyer>();  // List of active buyers
-    private const int maxBuyersDisplayed = 9;        // Maximum number of buyers to display
+    private const int maxBuyersDisplayed = 12;        // Maximum number of buyers to display
 
     void Start()
     {

@@ -24,7 +24,7 @@ public class BuyerCard : MonoBehaviour
         priceText.text = buyer.Price + " per kg";
         timerText.text = Mathf.Ceil(buyer.Timer) + "s";
 
-        supplyButton.onClick.AddListener(() => onSupply(buyer));
+        supplyButton.onClick.AddListener(() => destroyObject());
         denyButton.onClick.AddListener(() => onDeny(buyer));
     }
 
@@ -40,4 +40,8 @@ public class BuyerCard : MonoBehaviour
         }
     }
 
+    private void destroyObject()
+    {
+        Destroy(gameObject);
+    }
 }

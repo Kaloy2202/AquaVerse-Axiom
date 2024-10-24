@@ -13,6 +13,8 @@ public class FeedAgent : AbstractAgent
 
     //reference to the pool end of dimension position
     private float top, bottom, left, right, front, back;
+
+    private PoolManager parentPool;
     public override void Init()
     {
         base.Init();
@@ -25,12 +27,7 @@ public class FeedAgent : AbstractAgent
         CreateStepper(Behave);
 
         SceneMngrState sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
-        top = sceneMngrState.getTop();
-        bottom = sceneMngrState.getBot();
-        left = sceneMngrState.getLeft();
-        right = sceneMngrState.getRight();
-        front = sceneMngrState.getFront();
-        back = sceneMngrState.getBack();
+        StartCoroutine(decay());
     }
     //determines the movement of the feed
     void Behave(){
@@ -89,4 +86,31 @@ public class FeedAgent : AbstractAgent
         Vector3 dir = calculateMagnitude(forceSource, forceRadius);
         rb.AddForce(dir);
     }
+
+    public void setBounds(Vector3 center, Vector3 dimensions){
+        float x = dimensions.x/2;
+        float y = dimensions.y/2;
+        float z = dimensions.z/2;
+
+        top = center.y+ y;
+        bottom = center.y- y;
+        left = center.x -x;
+        right = center.x+x;
+        front = center.z + z;
+        back = center.z- z;
+    }
+
+    IEnumerator decay(){
+        yield return new WaitForSeconds(8);
+        rb.useGravity = true;
+        rb.drag = 30;
+        yield return new WaitForSeconds(4);
+        parentPool.updateExcessFeed(content);
+        Destroy(gameObject);
+    }
+
+    public void setPoolMngr(PoolManager pool){
+        this.parentPool = pool;
+    }
+
 }

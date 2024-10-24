@@ -228,11 +228,11 @@ public class Growth : AbstractAgent
         consumedFeed -= digestionRate;
         return digestionRate * 18792;
     }
-
     private float calcGrowth(){
         float energyIntake = calcTotalEnergyIntake();
         float metabolism = calcMetabolicCost();
         if(!poolManager.isOxygenEnough(metabolism * 18792 * 0.2f)){
+            Debug.Log("oxygen not enough");
             Destroy(this.gameObject);
             return 0;
         }

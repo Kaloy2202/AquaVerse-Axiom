@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,7 +31,7 @@ public class InputManager : MonoBehaviour
         return lastPosition;
     }
 
-    public Vector3? getMousePosition(){
+    public Vector3[]? getMousePosition(){
         Vector3 mousePos = Input.mousePosition;
 
         mousePos.z = sceneCamera.nearClipPlane;
@@ -38,11 +39,41 @@ public class InputManager : MonoBehaviour
         Ray ray = sceneCamera.ScreenPointToRay(mousePos);
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 100, placementLayer)){
-            return hit.point;
+            GameObject pondObject = hit.collider.gameObject;
+            if(pondObject.GetComponent<PoolManager>() != null){
+                PoolManager poolManager = pondObject.GetComponent<PoolManager>();
+                //0 is the position of the mouse
+                //1 is the center of the pond
+                //2 is the dimension of the pond
+                Vector3[] returnable = {hit.point, poolManager.getCenter(), poolManager.getDimensions()};
+                return returnable;
+            }else{
+                Debug.Log("no pool manager script found");
+            }
         }
         return null;
     }
-    
+    public (Vector3, PoolManager)? getHitPositionAndPoolObject(){
+        Vector3 mousePos = Input.mousePosition;
+
+        mousePos.z = sceneCamera.nearClipPlane;
+
+        Ray ray = sceneCamera.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, 100, placementLayer)){
+            GameObject pondObject = hit.collider.gameObject;
+            if(pondObject.GetComponent<PoolManager>() != null){
+                PoolManager poolManager = pondObject.GetComponent<PoolManager>();
+                //0 is the position of the mouse
+                //1 is the center of the pond
+                //2 is the dimension of the pond
+                return (hit.point, poolManager);
+            }else{
+                Debug.Log("no pool manager script found");
+            }
+        }
+        return null;
+    }
     public PoolManager? getSelectedPool(){
         Vector3 mousePos = Input.mousePosition;
 

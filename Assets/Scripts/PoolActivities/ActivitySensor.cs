@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+#nullable enable
 
 public class ActivitySensor : MonoBehaviour
 {
@@ -22,30 +23,28 @@ void Update()
 {
     int status = sceneMngrState.getStatus();
 
-    // Check if the pointer is over a UI element
-    if (EventSystem.current.IsPointerOverGameObject())
-    {
-        return; // Exit if the click is on a UI element
-    }
-
-    if (Input.GetMouseButtonDown(0))
-    {
-        Vector3? pos = inputManager.getMousePosition();
-        if (pos != null)
-        {
-            switch (status)
-            {
-                case 0:
-                    feedController.generateFeeds(100, (Vector3)pos);
-                    break;
-                case 1:
-                    fishController.spawnFish((Vector3)pos);
-                    break;
+    if(sceneMngrState.getCanDoPondActions()){
+        if( status == 1 && Input.GetMouseButtonDown(0)){
+            //spawn fish when status is 1
+            PoolManager? pool = inputManager.getSelectedPool();
+            if(pool != null){
+                fishController.spawnFish(pool);
+            }else{
+                // Debug.Log("there is no pool manager script found");
             }
         }
-        else
-        {
-            Debug.Log("Invalid area");
+        if(status == 0 && Input.GetMouseButtonDown(0)){
+            (Vector3, PoolManager)? mousePos = inputManager.getHitPositionAndPoolObject();
+            if(mousePos != null){
+                //0 is the position of the mouse
+                //1 is the center of the pond
+                //2 is the dimension of the pond
+                Vector3 pos = mousePos.Value.Item1;
+                PoolManager poolManager = mousePos.Value.Item2;
+                feedController.generateFeeds(100, pos, poolManager);
+            }else{
+                Debug.Log("no pond hit detected");
+            }
         }
     }
 }

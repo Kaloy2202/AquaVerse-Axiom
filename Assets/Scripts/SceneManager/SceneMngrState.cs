@@ -21,14 +21,14 @@ public class SceneMngrState : MonoBehaviour
     private float startingTime;
 
     private Vector3 gizPos;
-    private FishController fishController;
     private float rad;
+
+    private bool canDoPondActions = false;
     void Start()
     {
         //0 for feed
         //1 for fish 
         status = 1;
-        fishController = GameObject.Find("FishController").GetComponent<FishController>();
     }
 
     public float getAvoidFactor()
@@ -176,6 +176,14 @@ public class SceneMngrState : MonoBehaviour
 
     public float getStartingtime(){
         return startingTime;
+    }
+
+    public void setCanDoPondActions(bool value){
+        this.canDoPondActions = value;
+    }
+
+    public bool getCanDoPondActions(){
+        return this.canDoPondActions;
     }
 
 }

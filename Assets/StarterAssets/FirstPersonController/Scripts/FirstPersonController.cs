@@ -177,8 +177,6 @@ namespace StarterAssets
 		}
        private void Move()
         {
-            // Initialize sprint state from input
-            Debug.Log("Input sprint: " + _input.sprint);
 			
             // Set target speed based on move speed, sprint speed and if sprint is pressed
 			float targetSpeed = Keyboard.current[Key.LeftShift].isPressed ? SprintSpeed : MoveSpeed;

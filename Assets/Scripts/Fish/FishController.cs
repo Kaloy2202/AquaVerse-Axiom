@@ -40,4 +40,8 @@ public class FishController : AbstractController
 
     }
 
+    internal void spawnFish(Vector3 pos)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -34,12 +34,14 @@ void Update()
             }
         }
         if(status == 0 && Input.GetMouseButtonDown(0)){
-            Vector3[]? mousePos = inputManager.getMousePosition();
+            (Vector3, PoolManager)? mousePos = inputManager.getHitPositionAndPoolObject();
             if(mousePos != null){
                 //0 is the position of the mouse
                 //1 is the center of the pond
                 //2 is the dimension of the pond
-                feedController.generateFeeds(100, mousePos[0], mousePos[1], mousePos[2]);
+                Vector3 pos = mousePos.Value.Item1;
+                PoolManager poolManager = mousePos.Value.Item2;
+                feedController.generateFeeds(100, pos, poolManager);
             }else{
                 Debug.Log("no pond hit detected");
             }

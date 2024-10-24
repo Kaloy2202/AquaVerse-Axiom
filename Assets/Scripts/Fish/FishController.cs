@@ -13,22 +13,28 @@ public class FishController : AbstractController
         sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
     }
 
-    public void spawnFish(Vector3 pos, Vector3 dimension){
+    public void spawnFish(PoolManager poolManager){
+        Vector3 pos = poolManager.getCenter();
+        Vector3 dimension = poolManager.getDimensions();
+
         Debug.Log("spawning");
-        float top = sceneMngrState.getTop();
+        float top = poolManager.getCenter().y + poolManager.getDimensions().y/2;
         Vector3 loc, dir;
         BoidMovement mov;
+        Growth growth;
         for(int i = 0; i < numberOfAgents; i++){
+            Debug.Log("location vector is: " +pos.ToString());
             loc = new Vector3(Random.Range((float)(pos.x - .5), (float)(pos.x + .5)), top, Random.Range((float)(pos.z - .5), (float)(pos.z + .5)));
             dir = loc - pos;
             GameObject a = Instantiate(agentPrefab);
-            a.GetComponent<BoidMovement>().Init();
-            a.GetComponent<Growth>().Init();
-
-            a.transform.position = loc;
             mov = a.GetComponent<BoidMovement>();
+            growth = a.GetComponent<Growth>();
+            a.transform.position = loc;
             mov.setBounds(pos, dimension);
             mov.setAgentVelocity(dir.normalized);
+            growth.setPoolMngrRef(poolManager);
+            a.GetComponent<BoidMovement>().Init();
+            a.GetComponent<Growth>().Init();
         }
         
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#nullable enable
 
 public class ActivitySensor : MonoBehaviour
 {
@@ -38,7 +39,9 @@ public class ActivitySensor : MonoBehaviour
             // }
             PoolManager? pool = inputManager.getSelectedPool();
             if(pool != null){
-                fishController.spawnFish(pool.getCenter(), pool.getDimensions());
+                fishController.spawnFish(pool);
+            }else{
+                Debug.Log("there is no pool manager script found");
             }
         }
     }

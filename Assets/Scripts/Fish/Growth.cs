@@ -150,7 +150,7 @@ public class Growth : AbstractAgent
 
     //visual growth
     private void Grow (){
-        float size = 2 * weight/averageAdultWeight;
+        float size = 5 * weight/averageAdultWeight;
         if(size > 1){
             size = 1;
         }

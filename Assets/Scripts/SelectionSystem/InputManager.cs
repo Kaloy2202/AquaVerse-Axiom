@@ -52,7 +52,7 @@ public class InputManager : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 100, placementLayer)){
             if(hit.collider != null && hit.collider.gameObject != null){
-                Debug.Log("hit");
+                Debug.Log(hit.collider.gameObject.name);
                 return hit.collider.gameObject.GetComponent<PoolManager>();
             }
         }

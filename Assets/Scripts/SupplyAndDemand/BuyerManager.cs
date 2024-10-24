@@ -10,24 +10,21 @@ public class BuyerManager : MonoBehaviour
     public TMP_Text playerMoneyText;  // Reference to the UI text element for player's money
     public TMP_Text playerStockText;  // Reference to the UI text element for player's stocks
     private PlayerStats playerStat;    // Reference to the PlayerStat script
-    private FirstPersonController firstPersonController; // Reference to teh PlayerStat script
+    private FirstPersonController firstPersonController; // Reference to the PlayerStat script
 
-    private List<Buyer> buyers = new List<Buyer>();
+    private List<Buyer> buyers = new List<Buyer>();  // List of active buyers
+    private const int maxBuyersDisplayed = 9;        // Maximum number of buyers to display
 
     void Start()
     {
-
         playerStat = FindObjectOfType<PlayerStats>(); // Find the PlayerStat component in the scene (assuming it's attached to the player)
-        DisableExistingBuyerCards(); // Clear any initial buyers/cards already in the BuyerCardUI panel
+        DisableExistingBuyerCards();                 // Clear any initial buyers/cards already in the BuyerCardUI panel
         firstPersonController = FindObjectOfType<FirstPersonController>();
 
-
-        // Update the UI with the initial player money
         UpdatePlayerMoneyUI();
         UpdatePlayerStockUI();
 
-        // Automatically generate new buyers after clearing the old ones
-        GenerateInitialBuyers(9); // Example: Create 30 new buyers
+        GenerateInitialBuyers();  // Generate the initial buyers, capped at 9
 
         EnableCursor();  // Enable the cursor when the UI is active
         DisablePlayerMovement();  // Disable player movement
@@ -58,10 +55,17 @@ public class BuyerManager : MonoBehaviour
                 Debug.LogError("Child index out of bounds in buyerUIPanel");
             }
 
+            // Check if a buyer's timer has expired
             if (buyer.IsExpired())
             {
                 RemoveBuyer(buyer, buyerUIPanel.GetChild(i).gameObject);
             }
+        }
+
+        // Ensure only 9 buyers are displayed and generate new ones as needed
+        if (buyers.Count < maxBuyersDisplayed && playerStat.availableStocks > 0)
+        {
+            GenerateNewBuyer();  // Generate new buyers if there are fewer than 9
         }
     }
 
@@ -71,26 +75,11 @@ public class BuyerManager : MonoBehaviour
         Cursor.visible = true;  // Makes the cursor visible
     }
 
-    void DisableCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;  // Locks the cursor to the center of the screen
-        Cursor.visible = false;  // Hides the cursor
-    }
-
-
     void DisablePlayerMovement()
     {
         if (firstPersonController != null)
         {
             firstPersonController.enabled = false;  // Disable player movement
-        }
-    }
-
-    void EnablePlayerMovement()
-    {
-        if (firstPersonController != null)
-        {
-            firstPersonController.enabled = true;  // Enable player movement
         }
     }
 
@@ -103,13 +92,26 @@ public class BuyerManager : MonoBehaviour
         }
     }
 
-    // Generate new buyers and display them in the UI
-    void GenerateInitialBuyers(int numBuyers)
+    // Generate initial buyers, ensuring no more than 9 are displayed
+    void GenerateInitialBuyers()
     {
-        for (int i = 0; i < numBuyers; i++)
+        int buyersToGenerate = Mathf.Min(maxBuyersDisplayed, playerStat.availableStocks > 0 ? 9 : 0);
+        for (int i = 0; i < buyersToGenerate; i++)
         {
-            CreateBuyer("Buyer " + (i + 1), "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
+            GenerateNewBuyer();
         }
+    }
+
+    // Generate a new buyer and add them to the UI, ensuring a maximum of 9 buyers are displayed
+    void GenerateNewBuyer()
+    {
+        if (buyers.Count >= maxBuyersDisplayed || playerStat.availableStocks <= 0)
+        {
+            return;  // Don't generate more than 9 buyers, or if stocks are depleted
+        }
+
+        // Create a new buyer with random demand, price, and timer
+        CreateBuyer("Buyer " + (buyers.Count + 1), "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
     }
 
     // Create a new buyer and instantiate its card in the UI
@@ -118,8 +120,7 @@ public class BuyerManager : MonoBehaviour
         GameObject buyerCardObj = GetDisabledBuyerCard();  // Try to reuse a disabled card
         if (buyerCardObj == null)
         {
-            // No disabled card available, so instantiate a new one
-            buyerCardObj = Instantiate(buyerCardPrefab, buyerUIPanel);
+            buyerCardObj = Instantiate(buyerCardPrefab, buyerUIPanel);  // Instantiate a new card if none are available
         }
 
         buyerCardObj.SetActive(true);  // Activate the card to make it visible
@@ -143,20 +144,17 @@ public class BuyerManager : MonoBehaviour
         return null;  // No disabled card found
     }
 
-
     void SupplyBuyer(Buyer buyer)
     {
+        Debug.Log("Supply button clicked for buyer: " + buyer.Name);
         if (playerStat.availableStocks >= buyer.Demand)
         {
-            // Deduct the buyer's demand from available stocks
             playerStat.DeductStocks(buyer.Demand);  // Deduct the demanded amount from the available stock
             playerStat.money += buyer.Price * buyer.Demand;  // Update player's money
 
-            // Update the UI to reflect the new player money and stock
             UpdatePlayerMoneyUI();
             UpdatePlayerStockUI();
 
-            Debug.Log("Supplied buyer: " + buyer.Name);
             RemoveBuyer(buyer);
         }
         else
@@ -167,9 +165,8 @@ public class BuyerManager : MonoBehaviour
 
     void DenyBuyer(Buyer buyer)
     {
-        // Logic for denying the buyer
-        Debug.Log("Denied buyer: " + buyer.Name);
-        RemoveBuyer(buyer);
+        Debug.Log("Deny button clicked for buyer: " + buyer.Name);
+        RemoveBuyer(buyer);  // Deny buyer and remove from UI
     }
 
     // Update the player's money display in the UI
@@ -178,6 +175,15 @@ public class BuyerManager : MonoBehaviour
         if (playerMoneyText != null)
         {
             playerMoneyText.text = playerStat.money.ToString();
+        }
+    }
+
+    // Update the player's stock display in the UI
+    void UpdatePlayerStockUI()
+    {
+        if (playerStockText != null)
+        {
+            playerStockText.text = playerStat.availableStocks.ToString() + " kg";
         }
     }
 
@@ -195,23 +201,12 @@ public class BuyerManager : MonoBehaviour
             for (int i = 0; i < buyerUIPanel.childCount; i++)
             {
                 BuyerCard card = buyerUIPanel.GetChild(i).GetComponent<BuyerCard>();
-                if (card.name == buyer.Name) // Check by name or another unique identifier
+                if (card.name == buyer.Name)
                 {
                     Destroy(buyerUIPanel.GetChild(i).gameObject);
                     break;
                 }
             }
         }
-
-        // Automatically create a new buyer to replace the old one
-        CreateBuyer("New Buyer", "New Reason", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
     }
-    void UpdatePlayerStockUI()
-    {
-        if (playerStockText != null)
-        {
-            playerStockText.text = playerStat.availableStocks.ToString() + " kg";
-        }
-    }
-
 }

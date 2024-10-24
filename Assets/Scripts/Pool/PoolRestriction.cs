@@ -13,20 +13,17 @@ public class PoolRestrictoin : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void OnTriggerEnter(Collider collider){
         if(collider.CompareTag("Player")){
+            Debug.Log("entered");
             sceneMngrState.setCanDoPondActions(true);
         }
     }
 
     void OnTriggerExit(Collider collider){
         if(collider.CompareTag("Player")){
+            Debug.Log("exited");
             sceneMngrState.setCanDoPondActions(false);
         }
     }

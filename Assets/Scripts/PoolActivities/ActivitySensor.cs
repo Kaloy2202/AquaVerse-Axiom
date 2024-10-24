@@ -22,34 +22,30 @@ void Update()
 {
     int status = sceneMngrState.getStatus();
 
-    // Check if the pointer is over a UI element
-    if (EventSystem.current.IsPointerOverGameObject())
+    if(Input.GetMouseButtonDown(0) && sceneMngrState.getCanDoPondActions()){
+        // Vector3? pos = inputManager.getMousePosition();
+        // if(pos != null){
+        //     switch(status){
+        //         case 0:
+        //             feedController.generateFeeds(100, (Vector3)pos);
+        //             break;
+        //         case 1:
+        //             fishController.spawnFish((Vector3)pos);
+        //             break;
+        //     }
+        // }else{
+        //     Debug.Log("invalid area");
+        // }
+        PoolManager? pool = inputManager.getSelectedPool();
+        if(pool != null){
+            fishController.spawnFish(pool);
+        }else{
+            Debug.Log("there is no pool manager script found");
+        }
+    }
+    else
     {
-        if(Input.GetMouseButtonDown(0) && sceneMngrState.getCanDoPondActions()){
-            // Vector3? pos = inputManager.getMousePosition();
-            // if(pos != null){
-            //     switch(status){
-            //         case 0:
-            //             feedController.generateFeeds(100, (Vector3)pos);
-            //             break;
-            //         case 1:
-            //             fishController.spawnFish((Vector3)pos);
-            //             break;
-            //     }
-            // }else{
-            //     Debug.Log("invalid area");
-            // }
-            PoolManager? pool = inputManager.getSelectedPool();
-            if(pool != null){
-                fishController.spawnFish(pool);
-            }else{
-                Debug.Log("there is no pool manager script found");
-            }
-        }
-        else
-        {
-            Debug.Log("Invalid area");
-        }
+        Debug.Log("Invalid area");
     }
 }
 

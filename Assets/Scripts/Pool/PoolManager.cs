@@ -86,7 +86,6 @@ public class PoolManager : MonoBehaviour
     }
 
     public bool isOxygenEnough(float value){
-        Debug.Log("remaining oxygen" + dissolvedOxygenContent);
         if(value > dissolvedOxygenContent){
             dissolvedOxygenContent = 0;
             return false;
@@ -118,7 +117,6 @@ public class PoolManager : MonoBehaviour
     IEnumerator startDynamicTemp(){
         while(true){
             calcTemperature();
-            Debug.Log("new temperature: " + poolTemperature );
             yield return new WaitForSeconds(numberSecondsForHour);
         }
     }

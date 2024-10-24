@@ -1,20 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using StarterAssets;
 
 public class BuyerManager : MonoBehaviour
 {
     public GameObject buyerCardPrefab;  // Prefab for creating buyer cards
     public Transform buyerUIPanel;      // UI panel where buyer cards are displayed
+    public TMP_Text playerMoneyText;  // Reference to the UI text element for player's money
+    public TMP_Text playerStockText;  // Reference to the UI text element for player's stocks
+    private PlayerStats playerStat;    // Reference to the PlayerStat script
+    private FirstPersonController firstPersonController; // Reference to teh PlayerStat script
 
     private List<Buyer> buyers = new List<Buyer>();
 
     void Start()
     {
-        // Clear any initial buyers/cards already in the BuyerCardUI panel
-        DisableExistingBuyerCards();
+
+        playerStat = FindObjectOfType<PlayerStats>(); // Find the PlayerStat component in the scene (assuming it's attached to the player)
+        DisableExistingBuyerCards(); // Clear any initial buyers/cards already in the BuyerCardUI panel
+        firstPersonController = FindObjectOfType<FirstPersonController>();
+
+
+        // Update the UI with the initial player money
+        UpdatePlayerMoneyUI();
+        UpdatePlayerStockUI();
 
         // Automatically generate new buyers after clearing the old ones
         GenerateInitialBuyers(9); // Example: Create 30 new buyers
+
+        EnableCursor();  // Enable the cursor when the UI is active
+        DisablePlayerMovement();  // Disable player movement
     }
 
     void Update()
@@ -49,6 +65,35 @@ public class BuyerManager : MonoBehaviour
         }
     }
 
+    void EnableCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;  // Unlocks the cursor
+        Cursor.visible = true;  // Makes the cursor visible
+    }
+
+    void DisableCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;  // Locks the cursor to the center of the screen
+        Cursor.visible = false;  // Hides the cursor
+    }
+
+
+    void DisablePlayerMovement()
+    {
+        if (firstPersonController != null)
+        {
+            firstPersonController.enabled = false;  // Disable player movement
+        }
+    }
+
+    void EnablePlayerMovement()
+    {
+        if (firstPersonController != null)
+        {
+            firstPersonController.enabled = true;  // Enable player movement
+        }
+    }
+
     // Clear all existing buyer cards in the UI panel
     void DisableExistingBuyerCards()
     {
@@ -63,7 +108,7 @@ public class BuyerManager : MonoBehaviour
     {
         for (int i = 0; i < numBuyers; i++)
         {
-            CreateBuyer("Buyer " + (i + 1), "Fish for Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
+            CreateBuyer("Buyer " + (i + 1), "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
         }
     }
 
@@ -101,9 +146,23 @@ public class BuyerManager : MonoBehaviour
 
     void SupplyBuyer(Buyer buyer)
     {
-        // Logic for supplying the buyer
-        Debug.Log("Supplied buyer: " + buyer.Name);
-        RemoveBuyer(buyer);
+        if (playerStat.availableStocks >= buyer.Demand)
+        {
+            // Deduct the buyer's demand from available stocks
+            playerStat.DeductStocks(buyer.Demand);  // Deduct the demanded amount from the available stock
+            playerStat.money += buyer.Price * buyer.Demand;  // Update player's money
+
+            // Update the UI to reflect the new player money and stock
+            UpdatePlayerMoneyUI();
+            UpdatePlayerStockUI();
+
+            Debug.Log("Supplied buyer: " + buyer.Name);
+            RemoveBuyer(buyer);
+        }
+        else
+        {
+            Debug.Log("Not enough stocks to supply buyer: " + buyer.Name);
+        }
     }
 
     void DenyBuyer(Buyer buyer)
@@ -111,6 +170,15 @@ public class BuyerManager : MonoBehaviour
         // Logic for denying the buyer
         Debug.Log("Denied buyer: " + buyer.Name);
         RemoveBuyer(buyer);
+    }
+
+    // Update the player's money display in the UI
+    void UpdatePlayerMoneyUI()
+    {
+        if (playerMoneyText != null)
+        {
+            playerMoneyText.text = playerStat.money.ToString();
+        }
     }
 
     // Remove a buyer and its corresponding card
@@ -138,4 +206,12 @@ public class BuyerManager : MonoBehaviour
         // Automatically create a new buyer to replace the old one
         CreateBuyer("New Buyer", "New Reason", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
     }
+    void UpdatePlayerStockUI()
+    {
+        if (playerStockText != null)
+        {
+            playerStockText.text = playerStat.availableStocks.ToString() + " kg";
+        }
+    }
+
 }

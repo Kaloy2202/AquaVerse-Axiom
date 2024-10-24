@@ -41,9 +41,32 @@ public class QuestManager : MonoBehaviour
         quests.Add(new QuestData
         {
             questId = "QUEST_1",
-            dialogueLines = new string[] { "Welcome to your first quest!", "Collect 5 items." },
-            requiredProgress = 5,
-            questDescription = "Collect 5 items to complete this quest"
+            dialogueLines = new string[] { 
+            "After a long time, our waters are finally recovering, hopefull we'll be able to eat some edible fish from now on"
+            , "Speaking of fish, I remember now! My parents once mentioned that your grandmother was a great aquaculture farmer, she was even called the Aqua Queen!",
+            "They told me she kept all her secrets in a diary", "Go to your house and find that diary!" },
+            requiredProgress = 1,
+            questDescription = "Find the Aqua Queen's diary at your grandmother's house"
+        });
+        quests.Add(new QuestData
+        {
+            questId = "QUEST_2",
+            dialogueLines = new string[] { 
+            "You found the diary! Let's see what secrets it holds...",
+            "It seems she has hidden some fish fry that was preserved using a cryogenic method",
+            "It seems it is hidden in a storage house near your house",
+            "Go to the storage house and find the fish fry!" },
+            requiredProgress = 1,
+            questDescription = "Find the cryogenically preserved fish fry"
+        });
+        quests.Add(new QuestData
+        {
+            questId = "QUEST_3",
+            dialogueLines = new string[] { 
+            "You found the cryogenically preserved fish fry! Now you can use the ponds inside your property to grow these fish fry!",
+            "Go to the ponds and start the aquaculture process!" },
+            requiredProgress = 1,
+            questDescription = "Start the aquaculture process"
         });
         // Add more quests as needed
     }
@@ -54,7 +77,6 @@ public class QuestManager : MonoBehaviour
         {
             currentQuest = quests[0];
             currentDialogueIndex = 0;
-            questCanvas.gameObject.SetActive(false);
             StartDialogue();
         }
     }

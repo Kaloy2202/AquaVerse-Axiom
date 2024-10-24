@@ -7,7 +7,7 @@ public class InteractionManager : MonoBehaviour
     public LayerMask interactableLayer;
     public Canvas NPCDialog;
     public Canvas HouseDialog;
-
+    public Canvas FishFryDialog;
     void Start()
     {
         // Add debug log to confirm canvas starts disabled
@@ -44,10 +44,19 @@ public class InteractionManager : MonoBehaviour
                 Debug.Log("NPC tag detected, enabling canvas");
                 NPCDialog.gameObject.SetActive(true);
             }
-            else if (hit.collider.CompareTag("Diary"))
+            else if (hit.collider.CompareTag("Diary") && QuestManager.Instance.IsQuestComplete("QUEST_1") == false)
             {
                 Debug.Log("Diary tag detected, enabling canvas");
                 HouseDialog.gameObject.SetActive(true);
+            }
+            else if (hit.collider.CompareTag("Inventory") && QuestManager.Instance.IsQuestComplete("QUEST_2") == false)
+            {
+                Debug.Log("Inventory tag detected, enabling canvas");
+                FishFryDialog.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("No valid tag detected");
             }
 
         }

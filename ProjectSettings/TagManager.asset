@@ -12,6 +12,7 @@ TagManager:
   - NPC
   - Interactable
   - Diary
+  - Inventory
   layers:
   - Default
   - TransparentFX

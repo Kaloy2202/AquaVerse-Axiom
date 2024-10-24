@@ -15,6 +15,10 @@ public class SceneMngrState : MonoBehaviour
     [SerializeField] private LayerMask foodLayer;
     [SerializeField] private LayerMask fishLayer;
     [SerializeField] private int status;
+    [SerializeField] private float numberOfSecondsPerHour;
+
+    private float currentTime;
+    private float startingTime;
 
     private Vector3 gizPos;
     private FishController fishController;
@@ -149,4 +153,29 @@ public class SceneMngrState : MonoBehaviour
     {
         return new Vector3(length, height, width);
     }
+
+    public float getGameDuration(){
+        return currentTime - startingTime;
+    }
+
+    public float getInGameTime(){
+        return currentTime;
+    }
+
+    public void setGameTime(float time){
+        this.currentTime = time;
+    }
+
+    public void setStartingTime(float startingTime){
+        this.startingTime = startingTime;
+    }
+
+    public float getNumberOfSecondsPerHour(){
+        return numberOfSecondsPerHour/24;
+    }
+
+    public float getStartingtime(){
+        return startingTime;
+    }
+
 }

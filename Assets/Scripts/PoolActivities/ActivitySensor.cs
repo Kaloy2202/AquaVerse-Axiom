@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+#nullable enable
 
 public class ActivitySensor : MonoBehaviour
 {
@@ -18,36 +18,31 @@ public class ActivitySensor : MonoBehaviour
         feedController = GameObject.Find("FeedController").GetComponent<FeedController>();
         fishController = GameObject.Find("FishController").GetComponent<FishController>();
     }
-void Update()
-{
-    int status = sceneMngrState.getStatus();
 
-    // Check if the pointer is over a UI element
-    if (EventSystem.current.IsPointerOverGameObject())
+    // Update is called once per frame
+    void Update()
     {
-        return; // Exit if the click is on a UI element
-    }
-
-    if (Input.GetMouseButtonDown(0))
-    {
-        Vector3? pos = inputManager.getMousePosition();
-        if (pos != null)
-        {
-            switch (status)
-            {
-                case 0:
-                    feedController.generateFeeds(100, (Vector3)pos);
-                    break;
-                case 1:
-                    fishController.spawnFish((Vector3)pos);
-                    break;
+        int status = sceneMngrState.getStatus();
+        if(Input.GetMouseButtonDown(0)){
+            // Vector3? pos = inputManager.getMousePosition();
+            // if(pos != null){
+            //     switch(status){
+            //         case 0:
+            //             feedController.generateFeeds(100, (Vector3)pos);
+            //             break;
+            //         case 1:
+            //             fishController.spawnFish((Vector3)pos);
+            //             break;
+            //     }
+            // }else{
+            //     Debug.Log("invalid area");
+            // }
+            PoolManager? pool = inputManager.getSelectedPool();
+            if(pool != null){
+                fishController.spawnFish(pool);
+            }else{
+                Debug.Log("there is no pool manager script found");
             }
         }
-        else
-        {
-            Debug.Log("Invalid area");
-        }
     }
-}
-
 }

@@ -3,6 +3,8 @@ using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
+    public static PlayerStats Instance { get; private set; }
+
     public int level = 1;
     public int experience = 0;
     public int experienceToNextLevel = 100;
@@ -19,12 +21,26 @@ public class PlayerStats : MonoBehaviour
 
     public RewardPopupManager rewardPopupManager; // Reference to the RewardPopupManager
 
-    void Start()
+    private void Awake()
+    {
+        // Singleton implementation
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);  // Ensure this persists across scenes
+        }
+        else
+        {
+            Destroy(gameObject);  // Ensure only one instance exists
+        }
+    }
+
+    private void Start()
     {
         UpdateUI();
     }
 
-    void Update()
+    private void Update()
     {
         // For testing purposes
         if (Input.GetKeyDown(KeyCode.E))

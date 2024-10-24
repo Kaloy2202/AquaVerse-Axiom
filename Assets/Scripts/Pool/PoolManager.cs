@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
+    [SerializeField] private Vector3 center;
+    [SerializeField] private Vector3 dimensions;
     private SceneMngrState sceneMngrState;
     private float poolTemperature = 27;
     private string poolStatus = "calm";
@@ -99,6 +101,15 @@ public class PoolManager : MonoBehaviour
         return -((float) (changeInTemp/10) * 0.45f);
 
     }
+
+    public Vector3 getCenter(){
+        return this.center;
+    }
+
+    public Vector3 getDimensions(){
+        return this.dimensions;
+    }
+    
         private void calcTemperature(){
         float timeFactor = (float)(1 + Math.Cos(2 * Math.PI/24 * (sceneMngrState.getInGameTime() - 14)));
         poolTemperature = minPoolTemp + ((maxPoolTemp - minPoolTemp) * (timeFactor/2));
@@ -111,5 +122,6 @@ public class PoolManager : MonoBehaviour
             yield return new WaitForSeconds(numberSecondsForHour);
         }
     }
+
     
 }

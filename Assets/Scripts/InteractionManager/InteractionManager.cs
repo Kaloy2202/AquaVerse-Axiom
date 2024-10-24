@@ -1,15 +1,18 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
 {
     public float interactionRange = 3f;
     public LayerMask interactableLayer;
-    public Canvas canvas;
-
+    public Canvas NPCDialog;
+    public Canvas HouseDialog;
+    public Canvas FishFryDialog;
     void Start()
     {
         // Add debug log to confirm canvas starts disabled
-        canvas.gameObject.SetActive(false);
+        NPCDialog.gameObject.SetActive(false);
+        HouseDialog.gameObject.SetActive(false);
         Debug.Log("Canvas disabled on start");
     }
 
@@ -39,12 +42,23 @@ public class InteractionManager : MonoBehaviour
             if(hit.collider.CompareTag("NPC")) // Use CompareTag instead of tag ==
             {
                 Debug.Log("NPC tag detected, enabling canvas");
-                canvas.gameObject.SetActive(true);
+                NPCDialog.gameObject.SetActive(true);
+            }
+            else if (hit.collider.CompareTag("Diary") && QuestManager.Instance.IsQuestComplete("QUEST_1") == false)
+            {
+                Debug.Log("Diary tag detected, enabling canvas");
+                HouseDialog.gameObject.SetActive(true);
+            }
+            else if (hit.collider.CompareTag("Inventory") && QuestManager.Instance.IsQuestComplete("QUEST_2") == false)
+            {
+                Debug.Log("Inventory tag detected, enabling canvas");
+                FishFryDialog.gameObject.SetActive(true);
             }
             else
             {
-                Debug.Log("Hit object does not have NPC tag");
+                Debug.Log("No valid tag detected");
             }
+
         }
         else
         {

@@ -10,14 +10,30 @@ public class BoidMovement : AbstractAgent
     private float speedMultiplier = 1;
     private Vector3 biasDirection;
     private bool hasBias;
+
+    private float top, bottom, left, right, front, back;
+    private PoolManager poolManager;
     public override void Init()
     {
         base.Init();
         //reference to the scene manager
         sceneMngr = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
-        CreateStepper(Move); 
+        CreateStepper(Move);
         //initial speed multiplier
         speedMultiplier = 1;
+    }
+
+    public void setBounds(Vector3 center, Vector3 dimensions){
+        float x = dimensions.x/2;
+        float y = dimensions.y/2;
+        float z = dimensions.z/2;
+
+        top = center.y+ y;
+        bottom = center.y- y;
+        left = center.x -x;
+        right = center.x+x;
+        front = center.z + z;
+        back = center.z- z;
     }
 
     //moves the boid based on the value of the velocity property
@@ -130,28 +146,28 @@ private Vector3 calcSeperationVector() {
         //the amount of rotation to apply to the boid to prevent it from going outside of range
         float turnFac = sceneMngr.getRotateFactor();
         //when position is outside of specified range for right
-        if(pos.x > sceneMngr.getRight()){
+        if(pos.x > right){
             velocity.x -= turnFac;
         }
         //when position is more than the specified range for left
-        if(pos.x < sceneMngr.getLeft()){
+        if(pos.x < left){
             velocity.x += turnFac;
         }
         //when position is more than the specified range for top
         //bigger penalty here to prevent the boid from going outside of water
-        if(pos.y > sceneMngr.getTop()){
+        if(pos.y > top){
             velocity.y -= 0.5f;
         }
         //when position is more than the specified range for bot
-        if(pos.y < sceneMngr.getBot()){
+        if(pos.y < bottom){
             velocity.y += turnFac;
         }
         //when position is more than the specfied range for back
-        if(pos.z < sceneMngr.getBack()){
+        if(pos.z < back){
             velocity.z += turnFac;
         }
         //when position is more than the specified range for front
-        if(pos.z > sceneMngr.getFront()){
+        if(pos.z > front){
             velocity.z -= turnFac;
         }
     }

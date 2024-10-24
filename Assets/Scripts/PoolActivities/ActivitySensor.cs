@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#nullable enable
 
 public class ActivitySensor : MonoBehaviour
 {
@@ -22,19 +23,25 @@ public class ActivitySensor : MonoBehaviour
     void Update()
     {
         int status = sceneMngrState.getStatus();
-            if(Input.GetMouseButtonDown(0)){
-                    Vector3? pos = inputManager.getMousePosition();
-            if(pos != null){
-                switch(status){
-                    case 0:
-                        feedController.generateFeeds(100, (Vector3)pos);
-                        break;
-                    case 1:
-                        fishController.spawnFish((Vector3)pos);
-                        break;
-                }
+        if(Input.GetMouseButtonDown(0)){
+            // Vector3? pos = inputManager.getMousePosition();
+            // if(pos != null){
+            //     switch(status){
+            //         case 0:
+            //             feedController.generateFeeds(100, (Vector3)pos);
+            //             break;
+            //         case 1:
+            //             fishController.spawnFish((Vector3)pos);
+            //             break;
+            //     }
+            // }else{
+            //     Debug.Log("invalid area");
+            // }
+            PoolManager? pool = inputManager.getSelectedPool();
+            if(pool != null){
+                fishController.spawnFish(pool);
             }else{
-                Debug.Log("invalid area");
+                Debug.Log("there is no pool manager script found");
             }
         }
     }

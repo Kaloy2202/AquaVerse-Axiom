@@ -5,21 +5,21 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
-	[RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
-	[RequireComponent(typeof(PlayerInput))]
+    [RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour
-	{
-		[Header("Player")]
-		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 4.0f;
-		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 6.0f;
-		[Tooltip("Rotation speed of the character")]
-		public float RotationSpeed = 1.0f;
-		[Tooltip("Acceleration and deceleration")]
-		public float SpeedChangeRate = 10.0f;
+    public class FirstPersonController : MonoBehaviour
+    {
+        [Header("Player")]
+        [Tooltip("Move speed of the character in m/s")]
+        public float MoveSpeed = 4.0f;
+        [Tooltip("Sprint speed of the character in m/s")]
+        public float SprintSpeed = 6.0f;
+        [Tooltip("Rotation speed of the character")]
+        public float RotationSpeed = 1.0f;
+        [Tooltip("Acceleration and deceleration")]
+        public float SpeedChangeRate = 10.0f;
 
 		[Space(10)]
 		[Tooltip("The height the player can jump")]
@@ -175,51 +175,49 @@ namespace StarterAssets
 				transform.Rotate(Vector3.up * _rotationVelocity);
 			}
 		}
+       private void Move()
+        {
+            // Initialize sprint state from input
+            Debug.Log("Input sprint: " + _input.sprint);
+			
+            // Set target speed based on move speed, sprint speed and if sprint is pressed
+			float targetSpeed = Keyboard.current[Key.LeftShift].isPressed ? SprintSpeed : MoveSpeed;
 
-	private void Move()
-{
-    // Ensure sprint only occurs while shift is actively being held down
-    bool isSprinting = _input.sprint; // This should only be true while the sprint key is held down
+            // If there is no input, set the target speed to 0
+            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
-    // Set target speed based on move speed, sprint speed, and if sprint is pressed
-    float targetSpeed = isSprinting ? SprintSpeed : MoveSpeed;
+            // Reference to the players current horizontal velocity
+            float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
-    // If there is no input, set the target speed to 0
-    if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+            float speedOffset = 0.1f;
+            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
-    // Reference to the player's current horizontal velocity
-    float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+            // Accelerate or decelerate to target speed
+            if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+            {
+                // Creates curved result rather than a linear one giving a more organic speed change
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
 
-    float speedOffset = 0.1f;
-    float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+                // Round speed to 3 decimal places
+                _speed = Mathf.Round(_speed * 1000f) / 1000f;
+            }
+            else
+            {
+                _speed = targetSpeed;
+            }
 
-    // Accelerate or decelerate to target speed
-    if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-    {
-        // Smooth acceleration or deceleration to target speed
-        _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+            // Normalize input direction
+            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
-        // Round speed to 3 decimal places
-        _speed = Mathf.Round(_speed * 1000f) / 1000f;
-    }
-    else
-    {
-        _speed = targetSpeed;
-    }
+            // If there is move input rotate player when the player is moving
+            if (_input.move != Vector2.zero)
+            {
+                inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
+            }
 
-    // Normalize input direction
-    Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-    // If there is move input, rotate the player while moving
-    if (_input.move != Vector2.zero)
-    {
-        inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
-    }
-
-    // Move the player
-    _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-}
-
+            // Move the player
+            _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        }
 
 		private void JumpAndGravity()
 		{

@@ -10,16 +10,17 @@ public class CanvasSwitcher : MonoBehaviour
     public GameObject BuyerManager;
     public Image marketLockedBtn;
     public Image marketUnlockedBtn;
+    public AudioManager audioManager;
 
     private bool isMarketOpen = false;
-    
+    private bool isMiniGameCanvasOpen = false;
 
     private void Start()
     {
         // Ensure the button has a click listener
         if (miniGameButton != null)
         {
-            miniGameButton.onClick.AddListener(() => SwitchCanvas(miniGameUI));
+            miniGameButton.onClick.AddListener(() => ToggleMiniGameCanvas());
         }
         else
         {
@@ -43,7 +44,7 @@ public class CanvasSwitcher : MonoBehaviour
         // Check for F1 key press
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            SwitchCanvas(miniGameUI);
+            ToggleMiniGameCanvas();
         }
         if (Input.GetKeyDown(KeyCode.F2) && PlayerStats.Instance.level >= 3)
         {
@@ -58,23 +59,26 @@ public class CanvasSwitcher : MonoBehaviour
         }
     }
 
-    public void SwitchCanvas(Canvas canvas)
+    private void ToggleMiniGameCanvas()
     {
-        if (inGameUI != null && canvas != null)
+        if (inGameUI != null && miniGameUI != null)
         {
-            // Play close sound if the current active canvas is about to close
-            if (inGameUI.gameObject.activeSelf)
+            if (isMiniGameCanvasOpen)
             {
+                // Close the miniGameUI canvas
                 PlayCanvasCloseSound();
+                miniGameUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                // Open the miniGameUI canvas
+                PlayCanvasOpenSound();
                 inGameUI.gameObject.SetActive(false);
+                miniGameUI.gameObject.SetActive(true);
             }
 
-            // Play open sound for the new canvas being opened
-            if (!canvas.gameObject.activeSelf)
-            {
-                PlayCanvasOpenSound();
-                canvas.gameObject.SetActive(true);
-            }
+            // Toggle the state
+            isMiniGameCanvasOpen = !isMiniGameCanvasOpen;
         }
     }
 

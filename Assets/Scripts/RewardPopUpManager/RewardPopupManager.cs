@@ -8,6 +8,8 @@ public class RewardPopupManager : MonoBehaviour
 {
     public GameObject rewardPopup; // The popup UI element
     public TextMeshProUGUI rewardText; // Text for the reward message
+    public AudioManager audioManager; // Reference to AudioManager
+
     public Image lv2;
     public Image lv3;
     public Image lv4;
@@ -32,6 +34,14 @@ public class RewardPopupManager : MonoBehaviour
     {
         rewardPopup.SetActive(true); // Enable the popup UI
         // rewardText.text = rewardMessage; // Set the reward message text
+        if (audioManager != null)
+        {
+            audioManager.Play("RewardSound");
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager is not assigned.");
+        }
 
         if (currentLvl == 2)
         {

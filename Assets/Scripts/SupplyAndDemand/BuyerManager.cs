@@ -14,7 +14,7 @@ public class BuyerManager : MonoBehaviour
 
     private List<Buyer> buyers = new List<Buyer>();  // List of active buyers
     private const int maxBuyersDisplayed = 12;        // Maximum number of buyers to display
-
+    private int count = 0;
     void Start()
     {
         playerStat = FindObjectOfType<PlayerStats>(); // Find the PlayerStat component in the scene (assuming it's attached to the player)
@@ -32,35 +32,35 @@ public class BuyerManager : MonoBehaviour
 
     void Update()
     {
-        for (int i = buyers.Count - 1; i >= 0; i--)
-        {
-            Buyer buyer = buyers[i];
-            buyer.UpdateTimer(Time.deltaTime);
+        // for (int i = buyers.Count - 1; i >= 0; i--)
+        // {
+        //     Buyer buyer = buyers[i];
+        //     buyer.UpdateTimer(Time.deltaTime);
 
-            // Update the corresponding buyer card's timer display
-            if (i < buyerUIPanel.childCount)
-            {
-                BuyerCard card = buyerUIPanel.GetChild(i).GetComponent<BuyerCard>();
-                if (card != null)
-                {
-                    card.UpdateTimerDisplay();
-                }
-                else
-                {
-                    Debug.LogError("BuyerCard component is missing on child " + i);
-                }
-            }
-            else
-            {
-                Debug.LogError("Child index out of bounds in buyerUIPanel");
-            }
+        //     // Update the corresponding buyer card's timer display
+        //     if (i < buyerUIPanel.childCount)
+        //     {
+        //         BuyerCard card = buyerUIPanel.GetChild(i).GetComponent<BuyerCard>();
+        //         if (card != null)
+        //         {
+        //             card.UpdateTimerDisplay();
+        //         }
+        //         else
+        //         {
+        //             Debug.LogError("BuyerCard component is missing on child " + i);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         Debug.LogError("Child index out of bounds in buyerUIPanel");
+        //     }
 
-            // Check if a buyer's timer has expired
-            if (buyer.IsExpired())
-            {
-                RemoveBuyer(buyer, buyerUIPanel.GetChild(i).gameObject);
-            }
-        }
+        //     // Check if a buyer's timer has expired
+        //     if (buyer.IsExpired())
+        //     {
+        //         RemoveBuyer(buyer, buyerUIPanel.GetChild(i).gameObject);
+        //     }
+        // }
 
         // Ensure only 9 buyers are displayed and generate new ones as needed
         if (buyers.Count < maxBuyersDisplayed && playerStat.availableStocks > 0)
@@ -111,7 +111,7 @@ public class BuyerManager : MonoBehaviour
         }
 
         // Create a new buyer with random demand, price, and timer
-        CreateBuyer("Buyer " + (buyers.Count + 1), "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
+        CreateBuyer("Buyer " + count, "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
     }
 
     // Create a new buyer and instantiate its card in the UI
@@ -124,12 +124,12 @@ public class BuyerManager : MonoBehaviour
         }
 
         buyerCardObj.SetActive(true);  // Activate the card to make it visible
-
         BuyerCard buyerCard = buyerCardObj.GetComponent<BuyerCard>();
         Buyer newBuyer = new Buyer(name, reason, demand, price, timer);
         buyers.Add(newBuyer);
-
-        buyerCard.SetupCard(newBuyer, SupplyBuyer, DenyBuyer);
+        buyerCard.SetupCard(newBuyer, DenyBuyer);
+        buyerCard.setBuyerMngr(gameObject.GetComponent<BuyerManager>());
+        count++;
     }
 
     GameObject GetDisabledBuyerCard()
@@ -144,7 +144,7 @@ public class BuyerManager : MonoBehaviour
         return null;  // No disabled card found
     }
 
-    void SupplyBuyer(Buyer buyer)
+    public bool SupplyBuyer(Buyer buyer)
     {
         Debug.Log("Supply button clicked for buyer: " + buyer.Name);
         if (playerStat.availableStocks >= buyer.Demand)
@@ -156,10 +156,12 @@ public class BuyerManager : MonoBehaviour
             UpdatePlayerStockUI();
 
             RemoveBuyer(buyer);
+            return true;
         }
         else
         {
             Debug.Log("Not enough stocks to supply buyer: " + buyer.Name);
+            return false;
         }
     }
 
@@ -188,7 +190,7 @@ public class BuyerManager : MonoBehaviour
     }
 
     // Remove a buyer and its corresponding card
-    void RemoveBuyer(Buyer buyer, GameObject buyerCard = null)
+    public void RemoveBuyer(Buyer buyer, GameObject buyerCard = null)
     {
         buyers.Remove(buyer);
         if (buyerCard != null)

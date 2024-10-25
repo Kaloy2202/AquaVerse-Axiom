@@ -34,7 +34,9 @@ public class Growth : AbstractAgent
         CreateStepper(Grow);
 
         feedCap = calcMaxFeedIntake();
+        StartCoroutine(performDigestion());
         biteSize = weight * 0.02f;
+        poolManager.updateTotalFishMass(weight);
     }
 
     //behavior of fish when eating
@@ -73,15 +75,12 @@ public class Growth : AbstractAgent
             GameObject nearestFeed = null;
             float minDistance = float.MaxValue;
 
-            // Iterate through the first 10 elements or all elements if less than 10 exist
-            int limit = Mathf.Min(feed.Length, 10);
-            for (int i = 0; i < limit; i++)
-            {
-                float distance = Vector3.Distance(transform.position, feed[i].transform.position);
+            foreach(Collider coll in feed){
+                float distance = Vector3.Distance(transform.position, coll.transform.position);
                 if (distance < minDistance)
                 {
                     minDistance = distance;
-                    nearestFeed = feed[i].gameObject;
+                    nearestFeed = coll.gameObject;
                 }
             }
 
@@ -134,15 +133,11 @@ public class Growth : AbstractAgent
             //set the isEating to false
             //prevents further execution of this method
             isEating = false;
-            if(!isDigesting){
-                StartCoroutine(performDigestion());
-                isDigesting = true;
-            }
         }
     }
     private bool isHungry(){
         //fish is hungry when thre is difference in consumed feed and feed cap
-        if(consumedFeed > feedCap/2){
+        if(consumedFeed > feedCap * 0.75){
             return false;
         }
         return true;
@@ -231,8 +226,10 @@ public class Growth : AbstractAgent
     private float calcGrowth(){
         float energyIntake = calcTotalEnergyIntake();
         float metabolism = calcMetabolicCost();
-        if(!poolManager.isOxygenEnough(metabolism * 18792 * 0.2f)){
+        if(!poolManager.isOxygenEnough(metabolism * 1879.2f * 0.2f)){
             Debug.Log("oxygen not enough");
+            poolManager.updateTotalFishMass(-weight);
+            poolManager.updateNumberOfFish(-1);
             Destroy(this.gameObject);
             return 0;
         }
@@ -257,26 +254,46 @@ public class Growth : AbstractAgent
     }
 
     IEnumerator performDigestion(){
+        float multiplier;
+        float weightGain;
         while(true){
-            weight += 10 * calcGrowth();
-            if(weight > highestWeightAttained){
-                highestWeightAttained = weight;
+            weightGain = calcGrowth();
+            if(weightGain> 0){
+                multiplier = 50;
             }else{
+                multiplier = 10;
+            }
+            float prevWeight = weightGain;
+            weight += multiplier * weightGain;
+            if(weight > 1000){
+                //cap of growth is 1000 grams
+                weight = 1000;
+            }
+            else{
                 if(weight <= highestWeightAttained * 0.5f){
+                    poolManager.updateTotalFishMass(-prevWeight);
+                    poolManager.updateNumberOfFish(-1);
                     Destroy(this.gameObject);
                     Debug.Log("dead");
                     break;
                 }
             }
+            poolManager.updateTotalFishMass(weight - prevWeight);
+            if(weight > highestWeightAttained){
+                highestWeightAttained = weight;
+            }
             feedCap = calcMaxFeedIntake();
             biteSize = weight * 0.02f;
-            yield return new WaitForSeconds(1);
-            Debug.Log("weight: "+weight);
+            yield return new WaitForSeconds(2);
         }
     }
 
     public void setPoolMngrRef(PoolManager poolManager){
         this.poolManager = poolManager;
+    }
+
+    public void resetFoodObject(){
+        feedObject = null;
     }
 }
 

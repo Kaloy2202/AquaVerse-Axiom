@@ -6,6 +6,8 @@ public class PoolManager : MonoBehaviour
 {
     [SerializeField] private Vector3 center;
     [SerializeField] private Vector3 dimensions;
+    [SerializeField] private GameObject poolQualityIndicator;
+    [SerializeField] private GameObject averageWeightIndicator;
     private SceneMngrState sceneMngrState;
     private float poolTemperature = 27;
     private string poolStatus = "calm";
@@ -13,6 +15,9 @@ public class PoolManager : MonoBehaviour
     private float excessFeed = 0; //amount of feed that is not eaten by fish in grams
 
     private float dissolvedOxygenContent = 0;
+
+    private int numberOfFish = 0;
+    private float totalFishMass = 0;
 
     //temperature
     private float minPoolTemp = 24;
@@ -27,6 +32,21 @@ public class PoolManager : MonoBehaviour
         StartCoroutine(decomposeFeeds());
         numberSecondsForHour = sceneMngrState.getNumberOfSecondsPerHour();
         StartCoroutine(startDynamicTemp());
+    }
+
+    void Update(){
+        if(sceneMngrState.getCanDoPondActions()){
+            SliderIndicatorMngr poolQual = poolQualityIndicator.GetComponent<SliderIndicatorMngr>();
+            SliderIndicatorMngr weightIndicatr = averageWeightIndicator.GetComponent<SliderIndicatorMngr>();
+            if(poolQual != null){
+                float oxygenRatio = getCurrentToIdealOxygenRatio();
+                poolQual.setValue(oxygenRatio);
+            }
+            if(weightIndicatr != null){
+                float averageWeight = totalFishMass/numberOfFish;
+                weightIndicatr.setValue(averageWeight/1000);
+            }
+        }
     }
 
     public float getPoolTemperature(){
@@ -109,7 +129,7 @@ public class PoolManager : MonoBehaviour
         return this.dimensions;
     }
     
-        private void calcTemperature(){
+    private void calcTemperature(){
         float timeFactor = (float)(1 + Math.Cos(2 * Math.PI/24 * (sceneMngrState.getInGameTime() - 14)));
         poolTemperature = minPoolTemp + ((maxPoolTemp - minPoolTemp) * (timeFactor/2));
     }
@@ -120,6 +140,39 @@ public class PoolManager : MonoBehaviour
             yield return new WaitForSeconds(numberSecondsForHour);
         }
     }
+    public float getCurrentToIdealOxygenRatio(){
+        float ideal = calcDissolvedOxygenContent();
+        if(dissolvedOxygenContent > ideal){
+            dissolvedOxygenContent = ideal;
+        }
+        float ratio = dissolvedOxygenContent/ideal;
+        if(ratio > 0.75f){
+            poolStatus = "calm";
+        }else if(ratio > 0.3f){
+            poolStatus = "mild";
+        }else{
+            poolStatus = "stressed";
+        }
+        return ratio;
+    }
 
+    public void setFishNumber(int num){
+        numberOfFish = num;
+    }
     
+    public float getNumberOfFish(){
+        return numberOfFish;
+    }
+
+    public void updateNumberOfFish(int num){
+        numberOfFish += num;
+    }
+
+    public void updateTotalFishMass(float mass){
+        totalFishMass += mass;
+    }
+
+    public void changeWater(){
+        dissolvedOxygenContent = calcDissolvedOxygenContent();
+    }
 }

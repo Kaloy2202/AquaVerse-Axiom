@@ -17,15 +17,14 @@ public class FishController : AbstractController
         Vector3 pos = poolManager.getCenter();
         Vector3 dimension = poolManager.getDimensions();
 
-        Debug.Log("spawning");
         float top = poolManager.getCenter().y + poolManager.getDimensions().y/2;
         Vector3 loc, dir;
         BoidMovement mov;
         Growth growth;
         for(int i = 0; i < numberOfAgents; i++){
-            Debug.Log("location vector is: " +pos.ToString());
             loc = new Vector3(Random.Range((float)(pos.x - .5), (float)(pos.x + .5)), top, Random.Range((float)(pos.z - .5), (float)(pos.z + .5)));
             dir = loc - pos;
+            poolManager.updateNumberOfFish(1);
             GameObject a = Instantiate(agentPrefab);
             mov = a.GetComponent<BoidMovement>();
             growth = a.GetComponent<Growth>();

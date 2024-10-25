@@ -33235,7 +33235,6 @@ MonoBehaviour:
     volume: 0.06
     pitch: 0.5
     loop: 0
-    loop: 1
     source: {fileID: 0}
   - name: NighttimeMusic
     clip: {fileID: 8300000, guid: 25a9956c55aca0743aebbb433605484a, type: 3}
@@ -33259,12 +33258,16 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: ed7979cca68b1eb44ab872beb92e74c0, type: 3}
     volume: 0.5
     pitch: 1.05
-    volume: 0.295
-    pitch: 0.62
     loop: 0
     source: {fileID: 0}
   - name: Footstep
     clip: {fileID: 8300000, guid: d3d29f80378ba8e4e9c00f92fc5b5d4e, type: 3}
+    volume: 0.5
+    pitch: 1.35
+    loop: 0
+    source: {fileID: 0}
+  - name: RewardSound
+    clip: {fileID: 8300000, guid: 136b761c0348c5347a4d2fa738f881a1, type: 3}
     volume: 0.5
     pitch: 1.35
     loop: 0
@@ -37974,11 +37977,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rewardPopup: {fileID: 1913014208}
   rewardText: {fileID: 472037806}
+  audioManager: {fileID: 1464428517}
   lv2: {fileID: 1452437725}
   lv3: {fileID: 590670663}
   lv4: {fileID: 1318161023}
   lv5: {fileID: 1063207009}
   lv6: {fileID: 1684358925}
+  lv10: {fileID: 0}
+  lv15: {fileID: 0}
   badge1: {fileID: 645665059}
   badge2: {fileID: 2146480340}
   badge3: {fileID: 1094159423}

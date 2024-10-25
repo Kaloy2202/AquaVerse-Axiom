@@ -10,9 +10,10 @@ public class BoidMovement : AbstractAgent
     private float speedMultiplier = 1;
     private Vector3 biasDirection;
     private bool hasBias;
+    
+    private Growth growth;
 
     private float top, bottom, left, right, front, back;
-    private PoolManager poolManager;
     public override void Init()
     {
         base.Init();
@@ -21,6 +22,7 @@ public class BoidMovement : AbstractAgent
         CreateStepper(Move);
         //initial speed multiplier
         speedMultiplier = 1;
+        growth = gameObject.GetComponent<Growth>();
     }
 
     public void setBounds(Vector3 center, Vector3 dimensions){
@@ -137,8 +139,13 @@ private Vector3 calcSeperationVector() {
     //calculates the bias in direction of the boid
     //used when there is an event that will change the movement of the boid, such as when food is found
     private void calcBiasEffect(){
-        //calculate the direction of the bias direction from the boid and muultiply the value of the velocity with the bias factor
-        velocity += (biasDirection- transform.position ) * sceneMngr.getBiasFactor();
+        if(biasDirection.x > right || biasDirection.x < left || biasDirection.z > front || biasDirection.z < back){
+            growth.resetFoodObject();
+            hasBias = false;
+        }else{
+            //calculate the direction of the bias direction from the boid and muultiply the value of the velocity with the bias factor
+            velocity += (biasDirection- transform.position ) * sceneMngr.getBiasFactor();
+        }
     }
     //prevents the boid from going out of the specified range
     private void agentOutsideOfPond(){

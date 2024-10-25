@@ -44,9 +44,9 @@ public class QuestManager : MonoBehaviour
         {
             questId = "QUEST_1",
             dialogueLines = new string[] { 
-            "After a long time, our waters are finally recovering, hopefull we'll be able to eat some edible fish from now on"
-            , "Speaking of fish, I remember now! My parents once mentioned that your grandmother was a great aquaculture farmer, she was even called the Aqua Queen!",
-            "They told me she kept all her secrets in a diary", "Go to your house and find that diary!" },
+            "Na dumduman ko pa sang una ang hambal sang kamal-aman parte sa industriya sang pangisda sa Iloilo."
+            , "Maayo kay daw ga amat na balik ang estado sang katubigan. Excited na ako makatilaw sang gina hambal nila nga seafoods!",
+            "Dali lang...", "nadumduman ko na!","Hambal nila ang imo lola ang ginhihngalanan nga Aqua Queen sang una!", "Hambal nila, may ara siya diary nga puno sang mga impormasyon parte sa aquaculture.",  "Go to your house and find that diary!" },
             requiredProgress = 1,
             questDescription = "Find the Aqua Queen's diary at your grandmother's house"
         });
@@ -54,9 +54,9 @@ public class QuestManager : MonoBehaviour
         {
             questId = "QUEST_2",
             dialogueLines = new string[] { 
-            "You found the diary! Let's see what secrets it holds...",
-            "It seems she has hidden some fish fry that was preserved using a cryogenic method",
-            "It seems it is hidden in a storage house near your house",
+            "Salamat kay nakita mo gid man! Abi lantawon ta kun ano ang unod...",
+            "Siling diri, may ara kuno fish fry nga na preserve ang imo Lola paagi sa  cryo method.",
+            "Kag, nakatago daw ini sa isa ka daan nga warehouse lapit sa inyo balay.",
             "Go to the storage house and find the fish fry!" },
             requiredProgress = 1,
             questDescription = "Find the cryogenically preserved fish fry"
@@ -65,9 +65,10 @@ public class QuestManager : MonoBehaviour
         {
             questId = "QUEST_3",
             dialogueLines = new string[] { 
-            "You found the cryogenically preserved fish fry and also found some fish feeds in the storage house",
-            "Now you can feed your fish with these fish feeds!",
-            "Go to your ponds and start growing your fish!" },
+            "Hala! may ara gid man? Ano ni nga isda man?",
+            "Kag may fish feeds pa!",
+            "Pwede mo na ini ma gamit sa pagpa dako sang mga fish fry!",
+            "Go to your pond and start growing your fish!" },
             requiredProgress = 1,
             questDescription = "Start growing your fish!"
         });

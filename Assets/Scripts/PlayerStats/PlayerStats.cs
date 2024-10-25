@@ -45,7 +45,7 @@ public class PlayerStats : MonoBehaviour
         // For testing purposes
         if (Input.GetKeyDown(KeyCode.E))
         {
-            GainExperience(10);
+            GainExperience(100);
         }
     }
 
@@ -71,7 +71,7 @@ public class PlayerStats : MonoBehaviour
         // Show the level-up popup using RewardPopupManager
         if (rewardPopupManager != null)
         {
-            rewardPopupManager.ShowRewardPopup("Congratulations! You leveled up to Level " + level + "!");
+            rewardPopupManager.ShowRewardPopup("Congratulations! You leveled up to Level " + level + "!", level);
         }
 
         UpdateUI();

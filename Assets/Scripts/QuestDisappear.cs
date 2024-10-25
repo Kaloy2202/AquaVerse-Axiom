@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class QuestDisappear : MonoBehaviour
@@ -10,6 +11,7 @@ public class QuestDisappear : MonoBehaviour
     public int experienceReward;
     public int moneyReward;
     public int progressReward;
+    public TextMeshPro questIndicator;
 
     // Update is called once per frame
     void Update()
@@ -22,6 +24,7 @@ public class QuestDisappear : MonoBehaviour
             QuestManager.Instance.UpdateQuestProgress(questName, progressReward);
             PlayerStats.Instance.GainExperience(experienceReward);
             PlayerStats.Instance.money += moneyReward;
+            questIndicator.gameObject.SetActive(true);
             canvas.SetActive(false);
             
         }

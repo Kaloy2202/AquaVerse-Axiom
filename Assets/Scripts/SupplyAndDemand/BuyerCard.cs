@@ -17,7 +17,7 @@ public class BuyerCard : MonoBehaviour
 
     private BuyerManager buyerManager;
 
-    public void SetupCard(Buyer buyer, System.Action<Buyer> onSupply, System.Action<Buyer> onDeny)
+    public void SetupCard(Buyer buyer, System.Action<Buyer> onDeny)
     {
         this.buyer = buyer;
 
@@ -27,21 +27,17 @@ public class BuyerCard : MonoBehaviour
         priceText.text = buyer.Price + " per kg";
         timerText.text = Mathf.Ceil(buyer.Timer) + "s";
 
-        supplyButton.onClick.AddListener(() => onSupply(buyer));
+        supplyButton.onClick.AddListener(attemptToSupply);
         denyButton.onClick.AddListener(() => onDeny(buyer));
         denyButton.onClick.AddListener(()=>destroyObject());
         StartCoroutine(destroyAfter(buyer.Timer));
     }
 
-    void Update(){
-
-        UpdateTimerDisplay();
-    }
-    public void UpdateTimerDisplay()
+    public void UpdateTimerDisplay(int newTime)
     {
         if (buyer != null && timerText != null)
         {
-            timerText.text = Mathf.Ceil(buyer.Timer) + "s";
+            timerText.text = newTime + "s";
         }
         else
         {
@@ -54,8 +50,13 @@ public class BuyerCard : MonoBehaviour
     }
 
     IEnumerator destroyAfter(float time){
-        yield return new WaitForSeconds(time);
+        while(time > 0){
+            yield return new WaitForSeconds(1);
+            time -= 1;
+            UpdateTimerDisplay((int)time);
+        }
         buyerManager.RemoveBuyer(buyer);
+        destroyObject();
     }
     
     public void destroyObject(){
@@ -63,6 +64,8 @@ public class BuyerCard : MonoBehaviour
     }
 
     private void attemptToSupply(){
-        // if()
+        if(buyerManager.SupplyBuyer(buyer)){
+            Destroy(gameObject);
+        }
     }
 }

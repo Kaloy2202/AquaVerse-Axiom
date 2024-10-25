@@ -14,7 +14,7 @@ public class BuyerManager : MonoBehaviour
 
     private List<Buyer> buyers = new List<Buyer>();  // List of active buyers
     private const int maxBuyersDisplayed = 12;        // Maximum number of buyers to display
-
+    private int count = 0;
     void Start()
     {
         playerStat = FindObjectOfType<PlayerStats>(); // Find the PlayerStat component in the scene (assuming it's attached to the player)
@@ -111,7 +111,7 @@ public class BuyerManager : MonoBehaviour
         }
 
         // Create a new buyer with random demand, price, and timer
-        CreateBuyer("Buyer " + (buyers.Count + 1), "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
+        CreateBuyer("Buyer " + count, "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
     }
 
     // Create a new buyer and instantiate its card in the UI
@@ -127,8 +127,9 @@ public class BuyerManager : MonoBehaviour
         BuyerCard buyerCard = buyerCardObj.GetComponent<BuyerCard>();
         Buyer newBuyer = new Buyer(name, reason, demand, price, timer);
         buyers.Add(newBuyer);
-        buyerCard.SetupCard(newBuyer, SupplyBuyer, DenyBuyer);
+        buyerCard.SetupCard(newBuyer, DenyBuyer);
         buyerCard.setBuyerMngr(gameObject.GetComponent<BuyerManager>());
+        count++;
     }
 
     GameObject GetDisabledBuyerCard()
@@ -143,7 +144,7 @@ public class BuyerManager : MonoBehaviour
         return null;  // No disabled card found
     }
 
-    void SupplyBuyer(Buyer buyer)
+    public bool SupplyBuyer(Buyer buyer)
     {
         Debug.Log("Supply button clicked for buyer: " + buyer.Name);
         if (playerStat.availableStocks >= buyer.Demand)
@@ -155,10 +156,12 @@ public class BuyerManager : MonoBehaviour
             UpdatePlayerStockUI();
 
             RemoveBuyer(buyer);
+            return true;
         }
         else
         {
             Debug.Log("Not enough stocks to supply buyer: " + buyer.Name);
+            return false;
         }
     }
 

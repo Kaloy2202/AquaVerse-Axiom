@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class BuyerCard : MonoBehaviour
 {
@@ -14,7 +15,9 @@ public class BuyerCard : MonoBehaviour
 
     private Buyer buyer;
 
-    public void SetupCard(Buyer buyer, System.Action<Buyer> onSupply, System.Action<Buyer> onDeny)
+    private BuyerManager buyerManager;
+
+    public void SetupCard(Buyer buyer, System.Action<Buyer> onDeny)
     {
         this.buyer = buyer;
 
@@ -24,15 +27,17 @@ public class BuyerCard : MonoBehaviour
         priceText.text = buyer.Price + " per kg";
         timerText.text = Mathf.Ceil(buyer.Timer) + "s";
 
-        supplyButton.onClick.AddListener(() => destroyObject());
+        supplyButton.onClick.AddListener(attemptToSupply);
         denyButton.onClick.AddListener(() => onDeny(buyer));
+        denyButton.onClick.AddListener(()=>destroyObject());
+        StartCoroutine(destroyAfter(buyer.Timer));
     }
 
-    public void UpdateTimerDisplay()
+    public void UpdateTimerDisplay(int newTime)
     {
         if (buyer != null && timerText != null)
         {
-            timerText.text = Mathf.Ceil(buyer.Timer) + "s";
+            timerText.text = newTime + "s";
         }
         else
         {
@@ -40,8 +45,27 @@ public class BuyerCard : MonoBehaviour
         }
     }
 
-    private void destroyObject()
-    {
+    public void setBuyerMngr(BuyerManager buyerManager){
+        this.buyerManager = buyerManager;
+    }
+
+    IEnumerator destroyAfter(float time){
+        while(time > 0){
+            yield return new WaitForSeconds(1);
+            time -= 1;
+            UpdateTimerDisplay((int)time);
+        }
+        buyerManager.RemoveBuyer(buyer);
+        destroyObject();
+    }
+    
+    public void destroyObject(){
         Destroy(gameObject);
+    }
+
+    private void attemptToSupply(){
+        if(buyerManager.SupplyBuyer(buyer)){
+            Destroy(gameObject);
+        }
     }
 }

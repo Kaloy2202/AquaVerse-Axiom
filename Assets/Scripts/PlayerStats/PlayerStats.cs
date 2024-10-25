@@ -17,6 +17,7 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI experienceText;
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI titleText;
+    public GameObject InputManager;
     [SerializeField] private TMP_Text stockText;
 
     public RewardPopupManager rewardPopupManager; // Reference to the RewardPopupManager
@@ -38,14 +39,18 @@ public class PlayerStats : MonoBehaviour
     private void Start()
     {
         UpdateUI();
+        InputManager.SetActive(false);
     }
 
     private void Update()
     {
         // For testing purposes
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.L))
         {
             GainExperience(100);
+        }
+        if (level >= 2){
+            InputManager.SetActive(true);
         }
     }
 

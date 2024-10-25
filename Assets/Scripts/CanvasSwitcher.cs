@@ -8,7 +8,11 @@ public class CanvasSwitcher : MonoBehaviour
     public Image fishDemandMarketUI;
     public Button miniGameButton;
     public GameObject BuyerManager;
+    public Image marketLockedBtn;
+    public Image marketUnlockedBtn;
+
     private bool isMarketOpen = false;
+    
 
     private void Start()
     {
@@ -46,6 +50,11 @@ public class CanvasSwitcher : MonoBehaviour
             isMarketOpen = !isMarketOpen;
             fishDemandMarketUI.gameObject.SetActive(isMarketOpen);
             BuyerManager.SetActive(isMarketOpen);
+        }
+        if (PlayerStats.Instance.level >= 3)
+        {
+            marketLockedBtn.gameObject.SetActive(false);
+            marketUnlockedBtn.gameObject.SetActive(true);
         }
     }
 

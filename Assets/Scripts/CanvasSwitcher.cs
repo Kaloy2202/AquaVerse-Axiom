@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using StarterAssets;
 
 public class CanvasSwitcher : MonoBehaviour
 {
@@ -11,12 +12,15 @@ public class CanvasSwitcher : MonoBehaviour
     public Image marketLockedBtn;
     public Image marketUnlockedBtn;
     public AudioManager audioManager;
+    private FirstPersonController firstPersonController; // Reference to the PlayerStat script
 
     private bool isMarketOpen = false;
     private bool isMiniGameCanvasOpen = false;
 
     private void Start()
     {
+        firstPersonController = FindObjectOfType<FirstPersonController>();
+
         // Ensure the button has a click listener
         if (miniGameButton != null)
         {
@@ -51,6 +55,7 @@ public class CanvasSwitcher : MonoBehaviour
             isMarketOpen = !isMarketOpen;
             fishDemandMarketUI.gameObject.SetActive(isMarketOpen);
             BuyerManager.SetActive(isMarketOpen);
+            firstPersonController.enabled = !isMarketOpen;
         }
         if (PlayerStats.Instance.level >= 3)
         {

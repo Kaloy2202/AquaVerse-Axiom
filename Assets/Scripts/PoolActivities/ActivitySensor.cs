@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
 #nullable enable
 
 public class ActivitySensor : MonoBehaviour
@@ -10,7 +12,11 @@ public class ActivitySensor : MonoBehaviour
     private InputManager inputManager;
     private FeedController feedController;
     private FishController fishController;
-    private AudioManager audioManager;  // Reference to AudioManager
+    private AudioManager audioManager;
+    public TextMeshProUGUI currentFishCount;
+    
+    // Maximum number of fish allowed in the pool
+    const int MAX_FISH = 200;
 
     void Start()
     {
@@ -18,13 +24,14 @@ public class ActivitySensor : MonoBehaviour
         inputManager = GameObject.Find("InputManager").GetComponentInParent<InputManager>();
         feedController = GameObject.Find("FeedController").GetComponent<FeedController>();
         fishController = GameObject.Find("FishController").GetComponent<FishController>();
-        audioManager = GameObject.FindObjectOfType<AudioManager>();  // Initialize AudioManager
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
     }
 
     void Update()
     {
         int status = sceneMngrState.getStatus();
-
+        PoolManager poolManager = GameObject.FindObjectOfType<PoolManager>();
+        currentFishCount.text = $"{poolManager.getNumberOfFish()}/{MAX_FISH}";
         if (sceneMngrState.getCanDoPondActions())
         {
             if (Input.GetKeyDown(KeyCode.Q)) { sceneMngrState.setStatus(1); }
@@ -54,8 +61,16 @@ public class ActivitySensor : MonoBehaviour
         PoolManager? pool = inputManager.getSelectedPool();
         if (pool != null)
         {
-            fishController.spawnFish(pool);
-            audioManager.Play("SpawnSound");  // Play sound for spawning fish
+            // Check if adding 100 more fish would exceed the maximum
+            if (pool.getNumberOfFish() + 100 <= MAX_FISH)
+            {
+                fishController.spawnFish(pool);
+                audioManager.Play("SpawnSound");
+            }
+            else
+            {
+                Debug.Log($"Cannot spawn more fish. Maximum limit of {MAX_FISH} would be exceeded.");
+            }
         }
     }
 
@@ -67,7 +82,7 @@ public class ActivitySensor : MonoBehaviour
             Vector3 pos = mousePos.Value.Item1;
             PoolManager poolManager = mousePos.Value.Item2;
             feedController.generateFeeds(100, pos, poolManager);
-            audioManager.Play("FeedSound");  // Play sound for feeding fish
+            audioManager.Play("FeedSound");
         }
         else
         {
@@ -81,7 +96,7 @@ public class ActivitySensor : MonoBehaviour
         if (pool != null)
         {
             pool.changeWater();
-            audioManager.Play("WaterChangeSound");  // Play sound for changing water
+            audioManager.Play("WaterChangeSound");
         }
         else
         {

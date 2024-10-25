@@ -43,7 +43,7 @@ public class PlayerStats : MonoBehaviour
     private void Update()
     {
         // For testing purposes
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.L))
         {
             GainExperience(100);
         }

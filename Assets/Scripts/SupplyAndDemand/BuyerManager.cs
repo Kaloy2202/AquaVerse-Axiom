@@ -11,15 +11,19 @@ public class BuyerManager : MonoBehaviour
     public TMP_Text playerStockText;  // Reference to the UI text element for player's stocks
     private PlayerStats playerStat;    // Reference to the PlayerStat script
     private FirstPersonController firstPersonController; // Reference to the PlayerStat script
+    public GameObject roiPopupPrefab;
+    private ROICalculator roiCalculator;
 
     private List<Buyer> buyers = new List<Buyer>();  // List of active buyers
     private const int maxBuyersDisplayed = 12;        // Maximum number of buyers to display
     private int count = 0;
+    private int harvestWeight = 1000;
     void Start()
     {
         playerStat = FindObjectOfType<PlayerStats>(); // Find the PlayerStat component in the scene (assuming it's attached to the player)
         DisableExistingBuyerCards();                 // Clear any initial buyers/cards already in the BuyerCardUI panel
         firstPersonController = FindObjectOfType<FirstPersonController>();
+        roiCalculator = FindObjectOfType<ROICalculator>();
 
         UpdatePlayerMoneyUI();
         UpdatePlayerStockUI();
@@ -150,10 +154,14 @@ public class BuyerManager : MonoBehaviour
         if (playerStat.availableStocks >= buyer.Demand)
         {
             playerStat.DeductStocks(buyer.Demand);  // Deduct the demanded amount from the available stock
-            playerStat.money += buyer.Price * buyer.Demand;  // Update player's money
+            float revenue = buyer.Price * buyer.Demand;
+            playerStat.money += revenue;  // Update player's money
+            roiCalculator.AddRevenue(revenue, harvestWeight);
 
             UpdatePlayerMoneyUI();
             UpdatePlayerStockUI();
+
+            DisplayROIPopup();
 
             RemoveBuyer(buyer);
             return true;
@@ -211,4 +219,36 @@ public class BuyerManager : MonoBehaviour
             }
         }
     }
+
+    private void DisplayROIPopup()
+    {
+        if (roiPopupPrefab != null)
+        {
+            GameObject roiPopup = Instantiate(roiPopupPrefab, transform);
+            TMP_Text roiText = roiPopup.GetComponentInChildren<TMP_Text>();
+            if (roiText != null)
+            {
+                float fingerlingExpense = roiCalculator.GetFingerlingExpense();
+                float feedExpense = roiCalculator.GetFeedExpense();
+                float waterExpense = roiCalculator.GetWaterExpense();
+                float totalExpenses = roiCalculator.CalculateTotalExpenses();
+                float totalRevenue = roiCalculator.GetTotalRevenue();
+                float totalWeight = roiCalculator.GetTotalWeight();
+                float roi = roiCalculator.CalculateROI();
+
+                roiText.text = $"Farm Expenses:\n" +
+                               $"Fingerlings: {roiCalculator.fingerlingTaps * 100} x {roiCalculator.FingerlingCost} = {fingerlingExpense:F2}\n" +
+                               $"Feeds: {roiCalculator.feedTaps * 0.2f} kg x {roiCalculator.FeedCostPerKg} = {feedExpense:F2}\n" +
+                               $"Water Change: {roiCalculator.waterChangeTaps} x {roiCalculator.WaterChangeCost} = {waterExpense:F2}\n" +
+                               $"Total Farm Expenses: {totalExpenses:F2}\n\n" +
+                               $"Total Harvest:\n" +
+                               $"Total Weight: {totalWeight} kg\n" +
+                               $"Gross Income: {totalRevenue:F2}\n\n" +
+                               $"ROI: {roi:F2}%";
+            }
+
+            Destroy(roiPopup, 5f); // Destroy popup after 5 seconds
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ public class ActivitySensor : MonoBehaviour
     private FeedController feedController;
     private FishController fishController;
     private AudioManager audioManager;  // Reference to AudioManager
+    private ROICalculator roiCalculator;
 
     void Start()
     {
@@ -19,6 +20,7 @@ public class ActivitySensor : MonoBehaviour
         feedController = GameObject.Find("FeedController").GetComponent<FeedController>();
         fishController = GameObject.Find("FishController").GetComponent<FishController>();
         audioManager = GameObject.FindObjectOfType<AudioManager>();  // Initialize AudioManager
+        roiCalculator = GameObject.FindObjectOfType<ROICalculator>();
     }
 
     void Update()
@@ -56,6 +58,7 @@ public class ActivitySensor : MonoBehaviour
         {
             fishController.spawnFish(pool);
             audioManager.Play("SpawnSound");  // Play sound for spawning fish
+            roiCalculator.AddFingerlingExpense(1);
         }
     }
 
@@ -68,6 +71,7 @@ public class ActivitySensor : MonoBehaviour
             PoolManager poolManager = mousePos.Value.Item2;
             feedController.generateFeeds(100, pos, poolManager);
             audioManager.Play("FeedSound");  // Play sound for feeding fish
+            roiCalculator.AddFeedExpense(1);
         }
         else
         {
@@ -82,6 +86,7 @@ public class ActivitySensor : MonoBehaviour
         {
             pool.changeWater();
             audioManager.Play("WaterChangeSound");  // Play sound for changing water
+            roiCalculator.AddWaterChangeExpense(1);
         }
         else
         {

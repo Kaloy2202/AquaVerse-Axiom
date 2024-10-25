@@ -7,6 +7,7 @@ public class CanvasSwitcher : MonoBehaviour
     public Canvas miniGameUI;
     public Canvas fishDemandMarketUI;
     public Button miniGameButton;
+    public AudioManager audioManager; // Reference to AudioManager
 
     private void Start()
     {
@@ -49,9 +50,43 @@ public class CanvasSwitcher : MonoBehaviour
     {
         if (inGameUI != null && canvas != null)
         {
-            // Toggle the active state of each canvas
-            inGameUI.gameObject.SetActive(!inGameUI.gameObject.activeSelf);
-            canvas.gameObject.SetActive(!canvas.gameObject.activeSelf);
+            // Play close sound if the current active canvas is about to close
+            if (inGameUI.gameObject.activeSelf)
+            {
+                PlayCanvasCloseSound();
+                inGameUI.gameObject.SetActive(false);
+            }
+
+            // Play open sound for the new canvas being opened
+            if (!canvas.gameObject.activeSelf)
+            {
+                PlayCanvasOpenSound();
+                canvas.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void PlayCanvasOpenSound()
+    {
+        if (audioManager != null)
+        {
+            audioManager.Play("CanvasOpenSound");
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager not assigned in CanvasSwitcher.");
+        }
+    }
+
+    private void PlayCanvasCloseSound()
+    {
+        if (audioManager != null)
+        {
+            audioManager.Play("CanvasCloseSound");
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager not assigned in CanvasSwitcher.");
         }
     }
 }

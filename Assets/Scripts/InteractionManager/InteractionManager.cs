@@ -1,4 +1,5 @@
 using Microsoft.Unity.VisualStudio.Editor;
+using TMPro;
 using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class InteractionManager : MonoBehaviour
     public Canvas NPCDialog;
     public Canvas HouseDialog;
     public Canvas FishFryDialog;
+    public TextMeshPro questIndicator;
     void Start()
     {
         // Add debug log to confirm canvas starts disabled
@@ -43,6 +45,9 @@ public class InteractionManager : MonoBehaviour
             {
                 Debug.Log("NPC tag detected, enabling canvas");
                 NPCDialog.gameObject.SetActive(true);
+                questIndicator.gameObject.SetActive(false);
+                QuestManager.Instance.StartDialogueForQuest();
+
             }
             else if (hit.collider.CompareTag("Diary") && QuestManager.Instance.IsQuestComplete("QUEST_1") == false)
             {

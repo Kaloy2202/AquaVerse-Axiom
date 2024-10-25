@@ -5,9 +5,14 @@ public class CanvasSwitcher : MonoBehaviour
 {
     public Canvas inGameUI;
     public Canvas miniGameUI;
-    public Canvas fishDemandMarketUI;
+    public Image fishDemandMarketUI;
     public Button miniGameButton;
-    public AudioManager audioManager; // Reference to AudioManager
+    public GameObject BuyerManager;
+    public Image marketLockedBtn;
+    public Image marketUnlockedBtn;
+
+    private bool isMarketOpen = false;
+    
 
     private void Start()
     {
@@ -40,9 +45,16 @@ public class CanvasSwitcher : MonoBehaviour
         {
             SwitchCanvas(miniGameUI);
         }
-        if (Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F2) && PlayerStats.Instance.level >= 3)
         {
-            SwitchCanvas(fishDemandMarketUI);
+            isMarketOpen = !isMarketOpen;
+            fishDemandMarketUI.gameObject.SetActive(isMarketOpen);
+            BuyerManager.SetActive(isMarketOpen);
+        }
+        if (PlayerStats.Instance.level >= 3)
+        {
+            marketLockedBtn.gameObject.SetActive(false);
+            marketUnlockedBtn.gameObject.SetActive(true);
         }
     }
 

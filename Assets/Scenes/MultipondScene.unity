@@ -17380,11 +17380,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inGameUI: {fileID: 72930002}
   miniGameUI: {fileID: 2126180703}
-  fishDemandMarketUI: {fileID: 1878116065}
+  fishDemandMarketUI: {fileID: 0}
   miniGameButton: {fileID: 0}
-  BuyerManager: {fileID: 394574324}
-  marketLockedBtn: {fileID: 144872858}
-  marketUnlockedBtn: {fileID: 180668912}
+  BuyerManager: {fileID: 0}
+  marketLockedBtn: {fileID: 0}
+  marketUnlockedBtn: {fileID: 0}
+  audioManager: {fileID: 1464428517}
 --- !u!4 &742197678
 Transform:
   m_ObjectHideFlags: 0
@@ -34212,6 +34213,9 @@ MonoBehaviour:
   - name: CanvasCloseSound
     clip: {fileID: 8300000, guid: c4053a77734895f4ba68327ba623729e, type: 3}
     volume: 0.282
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
   - name: RewardSound
     clip: {fileID: 8300000, guid: 136b761c0348c5347a4d2fa738f881a1, type: 3}
     volume: 0.5

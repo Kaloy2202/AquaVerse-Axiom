@@ -13,6 +13,8 @@ public class RewardPopupManager : MonoBehaviour
     public Image lv4;
     public Image lv5;
     public Image lv6;
+    public Image lv10;
+    public Image lv15;
     public Image badge1;
     public Image badge2;
     public Image badge3;
@@ -54,6 +56,18 @@ public class RewardPopupManager : MonoBehaviour
         else if (currentLvl == 6)
         {
             lv6.gameObject.SetActive(true);
+        }
+        else if (currentLvl == 10)
+        {
+            lv10.gameObject.SetActive(true);
+            badge3.gameObject.SetActive(true);
+            badge2.gameObject.SetActive(false);
+        }
+        else if (currentLvl == 15)
+        {
+            lv15.gameObject.SetActive(true);
+            badge4.gameObject.SetActive(true);
+            badge3.gameObject.SetActive(false);
         }
         // Hide the popup after 3 seconds
         Invoke("HideRewardPopup", 3f); // Change duration if needed

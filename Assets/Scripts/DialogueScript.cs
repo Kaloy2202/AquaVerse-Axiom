@@ -10,7 +10,9 @@ public class QuestManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private Canvas questCanvas;
     [SerializeField] private float textSpeed = 0.05f;
-    
+
+    public AudioManager audioManager; // Reference to AudioManager for quest sounds
+
     private List<QuestData> quests = new List<QuestData>();
     private QuestData currentQuest;
     private int currentDialogueIndex;
@@ -149,6 +151,16 @@ public class QuestManager : MonoBehaviour
 
     private void CompleteQuest(QuestData quest)
     {
+
+        // Play quest completion sound
+        if (audioManager != null)
+        {
+            audioManager.Play("QuestCompleteSound");
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager is not assigned.");
+        }
         quest.isCompleted = true;
         int nextQuestIndex = quests.IndexOf(quest) + 1;
         

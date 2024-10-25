@@ -263,7 +263,7 @@ public class Growth : AbstractAgent
             }else{
                 multiplier = 10;
             }
-            float prevWeight = weightGain;
+            float prevWeight = weight;
             weight += multiplier * weightGain;
             if(weight > 1000){
                 //cap of growth is 1000 grams

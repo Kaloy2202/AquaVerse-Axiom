@@ -19,7 +19,13 @@ public class SliderIndicatorMngr : MonoBehaviour
         if(float.IsNaN(ratio) || float.IsInfinity(ratio) || ratio < 0){
             ratio = 0;
         }
+        if(ratio > 1){
+            ratio = 1;
+        }
         ratio *= 15.2f;
+        if(arrow == null){
+            arrow = transform.Find("ArrowIndicator").gameObject;
+        }
         arrow.transform.localPosition = new Vector3(startingPos.x + ratio, startingPos.y, startingPos.z);
     }
 }

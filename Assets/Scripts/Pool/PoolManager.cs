@@ -44,8 +44,6 @@ public class PoolManager : MonoBehaviour
             }
             if(weightIndicatr != null){
                 float averageWeight = totalFishMass/numberOfFish;
-                Debug.Log("totatl fish mass"+totalFishMass);
-                Debug.Log("number of fish:" +numberOfFish);
                 weightIndicatr.setValue(averageWeight/1000);
             }
         }
@@ -172,5 +170,9 @@ public class PoolManager : MonoBehaviour
 
     public void updateTotalFishMass(float mass){
         totalFishMass += mass;
+    }
+
+    public void changeWater(){
+        dissolvedOxygenContent = calcDissolvedOxygenContent();
     }
 }

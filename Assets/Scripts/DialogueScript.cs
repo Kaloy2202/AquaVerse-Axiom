@@ -63,10 +63,11 @@ public class QuestManager : MonoBehaviour
         {
             questId = "QUEST_3",
             dialogueLines = new string[] { 
-            "You found the cryogenically preserved fish fry! Now you can use the ponds inside your property to grow these fish fry!",
-            "Go to the ponds and start the aquaculture process!" },
+            "You found the cryogenically preserved fish fry and also found some fish feeds in the storage house",
+            "Now you can feed your fish with these fish feeds!",
+            "Go to your ponds and start growing your fish!" },
             requiredProgress = 1,
-            questDescription = "Start the aquaculture process"
+            questDescription = "Start growing your fish!"
         });
         // Add more quests as needed
     }
@@ -170,5 +171,15 @@ public class QuestManager : MonoBehaviour
     public string GetCurrentQuestDescription()
     {
         return currentQuest?.questDescription ?? "No active quest";
+    }
+    public string GetCurrentQuestId()
+    {
+        return currentQuest?.questId ?? "No active quest";
+    }
+    public bool isCurrentQuestCompleted(){
+        return currentQuest?.isCompleted ?? false;
+    }
+    public void StartDialogueForQuest(){
+        StartDialogue();
     }
 }

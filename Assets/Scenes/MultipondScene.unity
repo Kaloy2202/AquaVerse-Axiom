@@ -17049,6 +17049,7 @@ MonoBehaviour:
   miniGameUI: {fileID: 2126180703}
   fishDemandMarketUI: {fileID: 0}
   miniGameButton: {fileID: 0}
+  audioManager: {fileID: 1464428517}
 --- !u!4 &742197678
 Transform:
   m_ObjectHideFlags: 0
@@ -34052,6 +34053,18 @@ MonoBehaviour:
   - name: Footstep
     clip: {fileID: 8300000, guid: d3d29f80378ba8e4e9c00f92fc5b5d4e, type: 3}
     volume: 0.5
+    pitch: 1.35
+    loop: 0
+    source: {fileID: 0}
+  - name: CanvasOpenSound
+    clip: {fileID: 8300000, guid: c4053a77734895f4ba68327ba623729e, type: 3}
+    volume: 0.256
+    pitch: 1.35
+    loop: 0
+    source: {fileID: 0}
+  - name: CanvasCloseSound
+    clip: {fileID: 8300000, guid: c4053a77734895f4ba68327ba623729e, type: 3}
+    volume: 0.282
     pitch: 1.35
     loop: 0
     source: {fileID: 0}

@@ -32002,6 +32002,7 @@ MonoBehaviour:
     volume: 0.06
     pitch: 0.5
     loop: 0
+    loop: 1
     source: {fileID: 0}
   - name: NighttimeMusic
     clip: {fileID: 8300000, guid: 25a9956c55aca0743aebbb433605484a, type: 3}
@@ -32025,6 +32026,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: ed7979cca68b1eb44ab872beb92e74c0, type: 3}
     volume: 0.5
     pitch: 1.05
+    volume: 0.295
+    pitch: 0.62
     loop: 0
     source: {fileID: 0}
   - name: Footstep

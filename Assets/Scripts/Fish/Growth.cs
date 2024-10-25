@@ -263,23 +263,24 @@ public class Growth : AbstractAgent
             }else{
                 multiplier = 10;
             }
-            poolManager.updateTotalFishMass(weightGain * multiplier);
+            float prevWeight = weightGain;
             weight += multiplier * weightGain;
             if(weight > 1000){
                 //cap of growth is 1000 grams
                 weight = 1000;
             }
-            if(weight > highestWeightAttained){
-                highestWeightAttained = weight;
-            }
             else{
                 if(weight <= highestWeightAttained * 0.5f){
-                    poolManager.updateTotalFishMass(-(weight - weightGain));
+                    poolManager.updateTotalFishMass(-prevWeight);
                     poolManager.updateNumberOfFish(-1);
                     Destroy(this.gameObject);
                     Debug.Log("dead");
                     break;
                 }
+            }
+            poolManager.updateTotalFishMass(weight - prevWeight);
+            if(weight > highestWeightAttained){
+                highestWeightAttained = weight;
             }
             feedCap = calcMaxFeedIntake();
             biteSize = weight * 0.02f;

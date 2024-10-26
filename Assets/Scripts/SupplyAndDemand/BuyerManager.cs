@@ -9,7 +9,7 @@ public class BuyerManager : MonoBehaviour
     public Transform buyerUIPanel;      // UI panel where buyer cards are displayed
     public TMP_Text playerMoneyText;  // Reference to the UI text element for player's money
     public TMP_Text playerStockText;  // Reference to the UI text element for player's stocks
-    private PlayerStats playerStat;    // Reference to the PlayerStat script
+    private PlayerStats playerStat;    // Reference to the PlayerStat script000000000000000
     private FirstPersonController firstPersonController; // Reference to the PlayerStat script
 
     private List<Buyer> buyers = new List<Buyer>();  // List of active buyers
@@ -147,9 +147,10 @@ public class BuyerManager : MonoBehaviour
     public bool SupplyBuyer(Buyer buyer)
     {
         Debug.Log("Supply button clicked for buyer: " + buyer.Name);
-        if (playerStat.availableStocks >= buyer.Demand)
+        int demand =buyer.Demand *1000;
+        if (playerStat.availableStocks >= demand)
         {
-            playerStat.DeductStocks(buyer.Demand);  // Deduct the demanded amount from the available stock
+            playerStat.DeductStocks(demand);  // Deduct the demanded amount from the available stock
             playerStat.money += buyer.Price * buyer.Demand;  // Update player's money
 
             UpdatePlayerMoneyUI();
@@ -185,7 +186,7 @@ public class BuyerManager : MonoBehaviour
     {
         if (playerStockText != null)
         {
-            playerStockText.text = playerStat.availableStocks.ToString() + " kg";
+            playerStockText.text = (playerStat.availableStocks/1000).ToString() + " kg";
         }
     }
 

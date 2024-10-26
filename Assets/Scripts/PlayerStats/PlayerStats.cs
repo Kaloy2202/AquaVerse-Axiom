@@ -18,6 +18,7 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI titleText;
     public GameObject InputManager;
+    public TextMeshProUGUI stocks;
     [SerializeField] private TMP_Text stockText;
 
     public RewardPopupManager rewardPopupManager; // Reference to the RewardPopupManager
@@ -106,6 +107,7 @@ public class PlayerStats : MonoBehaviour
         experienceText.text = "XP: " + experience + "/" + experienceToNextLevel;
         titleText.text = title;
         moneyText.text = "" + money;
+        stocks.text = availableStocks + " grams";
     }
 
     public void AddMoney(int amount)

@@ -27,7 +27,7 @@ public class PoolManager : MonoBehaviour
     // Duration of one day in seconds
     private float numberSecondsForHour;
 
-    [SerializeField] private float harvestTimeInSecs = 10f; // Set harvest time here
+    [SerializeField] private float harvestTimeInSecs = 60f; // Set harvest time here
 
     void Start()
     {

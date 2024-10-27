@@ -7098,7 +7098,6 @@ MonoBehaviour:
   averageWeightIndicator: {fileID: 678777260}
   canvas: {fileID: 1319678479}
   textmsg: {fileID: 1822258061}
-  harvestTimeInSecs: 5
   harvestTimeInSecs: 60
 --- !u!82 &274667505
 AudioSource:
@@ -26474,7 +26473,6 @@ MonoBehaviour:
   averageWeightIndicator: {fileID: 2086210905}
   canvas: {fileID: 1319678479}
   textmsg: {fileID: 1822258061}
-  harvestTimeInSecs: 5
   harvestTimeInSecs: 60
 --- !u!82 &1066975789
 AudioSource:
@@ -36465,7 +36463,6 @@ MonoBehaviour:
   averageWeightIndicator: {fileID: 1212769574}
   canvas: {fileID: 1319678479}
   textmsg: {fileID: 1822258061}
-  harvestTimeInSecs: 5
   harvestTimeInSecs: 60
 --- !u!82 &1485382921
 AudioSource:

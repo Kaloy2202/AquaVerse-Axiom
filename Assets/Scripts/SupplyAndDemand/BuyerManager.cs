@@ -11,7 +11,12 @@ public class BuyerManager : MonoBehaviour
     public TMP_Text playerStockText;  // Reference to the UI text element for player's stocks
     private PlayerStats playerStat;    // Reference to the PlayerStat script000000000000000
     private FirstPersonController firstPersonController; // Reference to the PlayerStat script
-
+    public int minDemand = 10;  // Minimum demand for a buyer
+    public int maxDemand = 200;  // Maximum demand for a buyer
+    public int minPrice = 10;   // Minimum price for a buyer
+    public int maxPrice = 200;  // Maximum price for a buyer
+    public float minTimer = 10f;   // Minimum timer for a buyer
+    public float maxTimer = 30f;   // Maximum timer for a buyer
     private List<Buyer> buyers = new List<Buyer>();  // List of active buyers
     private const int maxBuyersDisplayed = 12;        // Maximum number of buyers to display
     private int count = 0;
@@ -111,7 +116,7 @@ public class BuyerManager : MonoBehaviour
         }
 
         // Create a new buyer with random demand, price, and timer
-        CreateBuyer("Buyer " + count, "Restaurant", Random.Range(10, 200), Random.Range(130, 200), Random.Range(10f, 30f));
+        CreateBuyer("Buyer " + count, "Restaurant", Random.Range(minDemand, maxDemand), Random.Range(minPrice, maxPrice), Random.Range(minTimer, maxTimer));
     }
 
     // Create a new buyer and instantiate its card in the UI
@@ -189,7 +194,7 @@ public class BuyerManager : MonoBehaviour
             playerStockText.text = (playerStat.availableStocks/1000).ToString() + " kg";
         }
     }
-
+    
     // Remove a buyer and its corresponding card
     public void RemoveBuyer(Buyer buyer, GameObject buyerCard = null)
     {

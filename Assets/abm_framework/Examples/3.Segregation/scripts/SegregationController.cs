@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 using ABMU.Core;
 
@@ -46,9 +48,11 @@ public class SegregationController : AbstractController
                 agentsSettled ++;
             }
         }
+#if UNITY_EDITOR
         if(agentsSettled == agents.Count){
             EditorApplication.isPaused = true;
         }
+#endif
 
     }
 

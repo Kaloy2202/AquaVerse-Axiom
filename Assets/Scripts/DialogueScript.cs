@@ -109,11 +109,15 @@ public class QuestManager : MonoBehaviour
 
     private IEnumerator TypeDialogueLine()
     {
-        foreach (char letter in currentQuest.dialogueLines[currentDialogueIndex].ToCharArray())
+        if( currentQuest != null && currentQuest.dialogueLines != null)
         {
-            dialogueText.text += letter;
-            yield return new WaitForSeconds(textSpeed);
+            foreach (char letter in currentQuest.dialogueLines[currentDialogueIndex].ToCharArray())
+            {
+                dialogueText.text += letter;
+                yield return new WaitForSeconds(textSpeed);
+            }
         }
+        
     }
 
     private void NextDialogueLine()

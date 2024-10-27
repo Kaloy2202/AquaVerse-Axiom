@@ -16,7 +16,7 @@ public class PoolManager : MonoBehaviour
     private float dissolvedOxygenContent = 0;
     private int numberOfFish = 0;
     private float totalFishMass = 0;
-    private bool startSpawn = false;
+    private bool startSpawn = false;    
     public Canvas canvas;
     public TextMeshProUGUI textmsg;
     
@@ -26,11 +26,14 @@ public class PoolManager : MonoBehaviour
     
     // Duration of one day in seconds
     private float numberSecondsForHour;
+    public float timer;
+    private bool timerStart;
 
     [SerializeField] private float harvestTimeInSecs = 60f; // Set harvest time here
 
     void Start()
     {
+        timer = harvestTimeInSecs;
         sceneMngrState = GameObject.Find("SceneManager").GetComponent<SceneMngrState>();
         dissolvedOxygenContent = calcDissolvedOxygenContent(); // Set initial value for the dissolved oxygen content of the pool
         StartCoroutine(decomposeFeeds());
@@ -42,6 +45,11 @@ public class PoolManager : MonoBehaviour
 
     void Update()
     {
+        if(timerStart == true)
+        {
+            timer -=Time.deltaTime;
+            Debug.Log("time till harvest"+timer);
+        }
         if (sceneMngrState.getCanDoPondActions())
         {
             SliderIndicatorMngr poolQual = poolQualityIndicator.GetComponent<SliderIndicatorMngr>();
@@ -62,6 +70,7 @@ public class PoolManager : MonoBehaviour
         if (numberOfFish > 0 && startSpawn == false)
         {
             startSpawn = true;
+            timerStart= true;
             StartCoroutine(HarvestFishRoutine());
             Debug.Log("CoRoutine is repeating");
         }
@@ -71,6 +80,12 @@ public class PoolManager : MonoBehaviour
     IEnumerator HarvestFishRoutine()
     {
         yield return new WaitForSeconds(harvestTimeInSecs); // Wait for the specified harvest time
+        timerStart = false;
+        timer = harvestTimeInSecs; //reset timer
+        if (totalFishMass < 0)
+        {
+            totalFishMass = 0;
+        }
         PlayerStats.Instance.AddStocks((int)totalFishMass); // Add total fish mass to player inventory
         // PlayerStats.Instance.GainExperience(500);
         Debug.Log("Fish harvested and added to player inventory." + (int)totalFishMass);

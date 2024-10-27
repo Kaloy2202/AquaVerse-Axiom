@@ -7,6 +7,7 @@ public class FishCountDisplay : MonoBehaviour
     [SerializeField] private Camera sceneCamera;
     [SerializeField] private LayerMask placementLayer;
     [SerializeField] private float displayDistance = 20f; // Maximum distance to show the text
+    public TextMeshProUGUI timerText;
     private const int MAX_FISH = 200;
     private PoolManager? lastPool = null;
     private float lastFishCount = -1;
@@ -38,6 +39,8 @@ public class FishCountDisplay : MonoBehaviour
         Ray ray = sceneCamera.ScreenPointToRay(mousePos);
 
         PoolManager? currentPool = null;
+        float timeToHarvest = 0f;
+
         if (Physics.Raycast(ray, out RaycastHit hit, displayDistance, placementLayer))
         {
             if (hit.collider != null && hit.collider.gameObject != null)
@@ -47,14 +50,19 @@ public class FishCountDisplay : MonoBehaviour
                 if (currentPool != null)
                 {
                     fishCountText.gameObject.SetActive(true);
+                    timerText.gameObject.SetActive(true);
+                    timeToHarvest = currentPool.timer;
                 }
             }
         }
+
+        timerText.text = $"Time to harvest: {(int)timeToHarvest} seconds";
 
         // If we didn't hit a pool or hit is too far, hide the text
         if (currentPool == null)
         {
             fishCountText.gameObject.SetActive(false);
+            timerText.gameObject.SetActive(false);
             lastPool = null;
             lastFishCount = -1;
             return;
@@ -74,9 +82,8 @@ public class FishCountDisplay : MonoBehaviour
     {
         int currentFish = (int)pool.getNumberOfFish();
         string poolName = pool.gameObject.name;
-        
+
         Debug.Log($"Updating display for {poolName}: {currentFish}/{MAX_FISH} fish");
-        
         fishCountText.text = $"{poolName}: {currentFish}/{MAX_FISH} fish";
         
         if (currentFish >= MAX_FISH)

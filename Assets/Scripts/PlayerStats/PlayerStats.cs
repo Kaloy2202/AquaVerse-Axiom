@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour
     public int experience = 0;
     public int experienceToNextLevel = 100;
     public string title = "Beginner";
-    public float money = 150000;
+    public float money = 1000;
     public int totalStocks = 1000;
     public int availableStocks = 1000;
 
@@ -17,7 +17,7 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI experienceText;
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI titleText;
-    public GameObject InputManager;
+    public GameObject SensorManager;
     public TextMeshProUGUI stocks;
     [SerializeField] private TMP_Text stockText;
 
@@ -40,7 +40,7 @@ public class PlayerStats : MonoBehaviour
     private void Start()
     {
         UpdateUI();
-        InputManager.SetActive(false);
+        SensorManager.SetActive(false);
     }
 
     private void Update()
@@ -51,7 +51,7 @@ public class PlayerStats : MonoBehaviour
             GainExperience(100);
         }
         if (level >= 2){
-            InputManager.SetActive(true);
+            SensorManager.SetActive(true);
         }
     }
 

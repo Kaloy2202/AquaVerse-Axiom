@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class PlayerStats : MonoBehaviour
@@ -21,19 +22,18 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI stocks;
     [SerializeField] private TMP_Text stockText;
 
-    public RewardPopupManager rewardPopupManager; // Reference to the RewardPopupManager
+    public RewardPopupManager rewardPopupManager;
 
     private void Awake()
     {
-        // Singleton implementation
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);  // Ensure this persists across scenes
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject);  // Ensure only one instance exists
+            Destroy(gameObject);
         }
     }
 
@@ -45,14 +45,55 @@ public class PlayerStats : MonoBehaviour
 
     private void Update()
     {
-        // For testing purposes
         if (Input.GetKeyDown(KeyCode.L))
         {
             GainExperience(100);
         }
+        
+        // Reset to main menu when backspace is pressed
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            ReturnToMainMenu();
+        }
+        
         if (level >= 2){
             SensorManager.SetActive(true);
         }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        // Reset all player stats to initial values
+        level = 1;
+        experience = 0;
+        experienceToNextLevel = 100;
+        title = "Beginner";
+        money = 1000;
+        totalStocks = 1000;
+        availableStocks = 1000;
+
+        // Update UI with reset values
+        UpdateUI();
+        
+        // Deactivate sensor manager
+        if (SensorManager != null)
+        {
+            SensorManager.SetActive(false);
+        }
+
+        try
+        {
+            // Load the MainMenu scene
+            SceneManager.LoadScene("MainMenu");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to load MainMenu scene. Make sure the scene is added to Build Settings! Error: " + e.Message);
+        }
+
+        // Since we're returning to main menu, we might want to destroy this instance
+        // Uncomment the next line if you want to completely reset the PlayerStats instance
+        // Destroy(gameObject);
     }
 
     public void GainExperience(int amount)
@@ -74,7 +115,6 @@ public class PlayerStats : MonoBehaviour
         experienceToNextLevel += 100;
         UpdateTitle();
 
-        // Show the level-up popup using RewardPopupManager
         if (rewardPopupManager != null)
         {
             rewardPopupManager.ShowRewardPopup("Congratulations! You leveled up to Level " + level + "!", level);
@@ -103,11 +143,11 @@ public class PlayerStats : MonoBehaviour
 
     void UpdateUI()
     {
-        levelText.text = "Level: " + level;
-        experienceText.text = "XP: " + experience + "/" + experienceToNextLevel;
-        titleText.text = title;
-        moneyText.text = "" + money;
-        stocks.text = availableStocks + " grams";
+        if (levelText != null) levelText.text = "Level: " + level;
+        if (experienceText != null) experienceText.text = "XP: " + experience + "/" + experienceToNextLevel;
+        if (titleText != null) titleText.text = title;
+        if (moneyText != null) moneyText.text = "" + money;
+        if (stocks != null) stocks.text = availableStocks + " grams";
     }
 
     public void AddMoney(int amount)
@@ -127,13 +167,15 @@ public class PlayerStats : MonoBehaviour
         UpdateStockUI();
         if (availableStocks < 0)
         {
-            availableStocks = 0;  // Ensure stocks don't go below 0
+            availableStocks = 0;
         }
     }
 
     private void UpdateStockUI()
     {
-        // Assuming you have a TMP_Text stockText field to update the UI
-        stockText.text = availableStocks.ToString() + " kg";
+        if (stockText != null)
+        {
+            stockText.text = availableStocks.ToString() + " kg";
+        }
     }
 }

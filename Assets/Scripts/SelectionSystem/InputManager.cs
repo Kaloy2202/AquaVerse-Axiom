@@ -12,7 +12,29 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Vector3 lastPosition;
     //layer where we wanted to to apply the raycast
     [SerializeField] private LayerMask placementLayer;
-    
+    private void Start()
+    {
+        // Hide cursor and lock it to the center of the screen
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    private void Update()
+{
+    // Example: Toggle cursor visibility with Escape key
+    if (Input.GetKeyDown(KeyCode.Escape))
+    {
+        if (Cursor.visible)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+}
     public Vector3 getSelectedMapPosition(){
         //get the position of the mouse based on the input package
         Vector3 mousePos = Input.mousePosition;
@@ -88,6 +110,17 @@ public class InputManager : MonoBehaviour
             }
         }
         return null;
+    }
+    private void OnEnable()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void OnDisable()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }
 

@@ -90,12 +90,14 @@ private Vector3 calcSeperationVector() {
     Vector3 vect = Vector3.zero;
     //loop through the registered neighbors
     foreach (GameObject gameObj in fishInRange) {
-        Vector3 difference = transform.position - gameObj.transform.position;
-        //distance of the boid from its neighbor
-        float distanceSquared = difference.sqrMagnitude;
-        //if distance of neighbor is less than or equal to the 80%  of the length of the boid then include it to the neighbors to keep distance from
-        if (distanceSquared <= transform.localScale.x * 2) {
-            vect += difference.normalized / Mathf.Max(distanceSquared, 0.01f); // Prevent division by extremely small values
+        if(gameObj != null){
+            Vector3 difference = transform.position - gameObj.transform.position;
+            //distance of the boid from its neighbor
+            float distanceSquared = difference.sqrMagnitude;
+            //if distance of neighbor is less than or equal to the 80%  of the length of the boid then include it to the neighbors to keep distance from
+            if (distanceSquared <= transform.localScale.x * 2) {
+                vect += difference.normalized / Mathf.Max(distanceSquared, 0.01f); // Prevent division by extremely small values
+            }
         }
     }
     return vect.normalized;
@@ -105,9 +107,11 @@ private Vector3 calcSeperationVector() {
         Vector3 vect = Vector3.zero;
         //loop through the registered neighbor boids
         foreach(GameObject gameObj in fishInRange) {
-            float angle = Vector3.Angle(transform.forward, (gameObj.transform.position - transform.position).normalized);
-            if(angle <= 90) { // Check if within 90 degrees of the forward direction, 180 degree field of view
-                vect += gameObj.transform.position;
+            if(gameObj != null){
+                float angle = Vector3.Angle(transform.forward, (gameObj.transform.position - transform.position).normalized);
+                if(angle <= 90) { // Check if within 90 degrees of the forward direction, 180 degree field of view
+                    vect += gameObj.transform.position;
+                }
             }
         }
         //do this when there is neighbor, otherwise there is no mass to center the boid
@@ -122,12 +126,14 @@ private Vector3 calcSeperationVector() {
         Vector3 vect = Vector3.zero;
         //loop through the neigboring boids
         foreach(GameObject gameObj in fishInRange) {
-            float angle = Vector3.Angle(transform.forward, (gameObj.transform.position - transform.position).normalized);
-            //check if neighbor is within the 180 degeree field of view of the boid
-            // if it is then add its velocity to the velocity the boid will need to catch up to
-            if(angle <= 90) {
-                BoidMovement boid = gameObj.GetComponent<BoidMovement>();
-                vect += boid.getAgentVelocity();  
+            if(gameObj != null){
+                float angle = Vector3.Angle(transform.forward, (gameObj.transform.position - transform.position).normalized);
+                //check if neighbor is within the 180 degeree field of view of the boid
+                // if it is then add its velocity to the velocity the boid will need to catch up to
+                if(angle <= 90) {
+                    BoidMovement boid = gameObj.GetComponent<BoidMovement>();
+                    vect += boid.getAgentVelocity();  
+                }
             }
         }
         if (fishInRange.Count > 0) {

@@ -67,7 +67,7 @@ public class ActivitySensor : MonoBehaviour
         }
         
         // Only process input if buttons are visible
-        if (buttonsVisible)
+        if (buttonsVisible == true)
         {
             int status = sceneMngrState.getStatus();
 

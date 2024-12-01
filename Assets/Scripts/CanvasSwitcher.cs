@@ -4,18 +4,13 @@ using StarterAssets;
 
 public class CanvasSwitcher : MonoBehaviour
 {
-    public Canvas inGameUI;
+    public Canvas smartCalculatorCanvas;  // The canvas for the smart calculator
     public Canvas miniGameUI;
-    public Image fishDemandMarketUI;
     public Button miniGameButton;
-    public GameObject BuyerManager;
-    public Image marketLockedBtn;
-    public Image marketUnlockedBtn;
     public AudioManager audioManager;
-    private FirstPersonController firstPersonController; // Reference to the PlayerStat script
+    private FirstPersonController firstPersonController;
 
-    private bool isMarketOpen = false;
-    private bool isMiniGameCanvasOpen = false;
+    private bool isSmartCalculatorOpen = false; // Track if the Smart Calculator is open
 
     private void Start()
     {
@@ -31,59 +26,68 @@ public class CanvasSwitcher : MonoBehaviour
             Debug.LogWarning("Switch Button not assigned in the CanvasSwitcher script. Button functionality will be disabled.");
         }
 
-        // Set initial state
-        if (inGameUI != null && miniGameUI != null)
+        // Set initial state for canvases
+        if (smartCalculatorCanvas != null && miniGameUI != null)
         {
-            inGameUI.gameObject.SetActive(true);
-            miniGameUI.gameObject.SetActive(false);
+            smartCalculatorCanvas.gameObject.SetActive(false);  // Hide Smart Calculator by default
+            miniGameUI.gameObject.SetActive(false);  // Hide Mini Game canvas by default
         }
         else
         {
-            Debug.LogError("One or both canvases not assigned in the CanvasSwitcher script!");
+            Debug.LogError("One or more canvases not assigned in the CanvasSwitcher script!");
         }
     }
 
     private void Update()
     {
-        // Check for F1 key press
+        // Listen for 'C' key press to toggle the Smart Calculator canvas
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleSmartCalculatorCanvas();
+        }
+
+        // Optional: If you still want to toggle MiniGameUI with F1 key
         if (Input.GetKeyDown(KeyCode.F1))
         {
             ToggleMiniGameCanvas();
         }
-        if (Input.GetKeyDown(KeyCode.F2) && PlayerStats.Instance.level >= 3)
+    }
+
+    private void ToggleSmartCalculatorCanvas()
+    {
+        if (smartCalculatorCanvas != null)
         {
-            isMarketOpen = !isMarketOpen;
-            fishDemandMarketUI.gameObject.SetActive(isMarketOpen);
-            BuyerManager.SetActive(isMarketOpen);
-            firstPersonController.enabled = !isMarketOpen;
-        }
-        if (PlayerStats.Instance.level >= 3)
-        {
-            marketLockedBtn.gameObject.SetActive(false);
-            marketUnlockedBtn.gameObject.SetActive(true);
+            if (isSmartCalculatorOpen)
+            {
+                // Close the Smart Calculator canvas
+                PlayCanvasCloseSound();
+                smartCalculatorCanvas.gameObject.SetActive(false);
+            }
+            else
+            {
+                // Open the Smart Calculator canvas
+                PlayCanvasOpenSound();
+                smartCalculatorCanvas.gameObject.SetActive(true);
+            }
+
+            // Toggle the state
+            isSmartCalculatorOpen = !isSmartCalculatorOpen;
         }
     }
 
     private void ToggleMiniGameCanvas()
     {
-        if (inGameUI != null && miniGameUI != null)
+        if (miniGameUI != null)
         {
-            if (isMiniGameCanvasOpen)
+            // Toggle the Mini Game canvas (assuming you still want this feature)
+            if (miniGameUI.gameObject.activeSelf)
             {
-                // Close the miniGameUI canvas
-                PlayCanvasCloseSound();
                 miniGameUI.gameObject.SetActive(false);
             }
             else
             {
-                // Open the miniGameUI canvas
-                PlayCanvasOpenSound();
-                inGameUI.gameObject.SetActive(false);
                 miniGameUI.gameObject.SetActive(true);
             }
-
-            // Toggle the state
-            isMiniGameCanvasOpen = !isMiniGameCanvasOpen;
         }
     }
 

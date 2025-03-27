@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "AquaSim1.sln"
+    "dotnet.defaultSolution": "AquaVerse-Axiom.sln"
 }

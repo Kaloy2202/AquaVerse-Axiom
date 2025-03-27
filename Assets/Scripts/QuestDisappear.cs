@@ -22,7 +22,7 @@ public class QuestDisappear : MonoBehaviour
             
             // Disable the canvas by setting it to inactive
             QuestManager.Instance.UpdateQuestProgress(questName, progressReward);
-            PlayerStats.Instance.GainExperience(experienceReward);
+            // PlayerStats.Instance.GainExperience(experienceReward);
             PlayerStats.Instance.money += moneyReward;
             questIndicator.gameObject.SetActive(true);
             canvas.SetActive(false);

@@ -50,14 +50,14 @@ public class CanvasSwitcher : MonoBehaviour
         {
             ToggleMiniGameCanvas();
         }
-        if (Input.GetKeyDown(KeyCode.F2) && PlayerStats.Instance.level >= 3)
+        if (Input.GetKeyDown(KeyCode.F2) && PlayerStats.Instance.level != -1) // -1 for now to disable it, originally >= 3
         {
             isMarketOpen = !isMarketOpen;
             fishDemandMarketUI.gameObject.SetActive(isMarketOpen);
             BuyerManager.SetActive(isMarketOpen);
             firstPersonController.enabled = !isMarketOpen;
         }
-        if (PlayerStats.Instance.level >= 3)
+        if (PlayerStats.Instance.level != -1)
         {
             marketLockedBtn.gameObject.SetActive(false);
             marketUnlockedBtn.gameObject.SetActive(true);

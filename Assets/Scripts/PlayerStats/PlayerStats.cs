@@ -40,7 +40,7 @@ public class PlayerStats : MonoBehaviour
     private void Start()
     {
         UpdateUI();
-        SensorManager.SetActive(false);
+        // SensorManager.SetActive(false);
     }
 
     private void Update()
@@ -78,7 +78,7 @@ public class PlayerStats : MonoBehaviour
         // Deactivate sensor manager
         if (SensorManager != null)
         {
-            SensorManager.SetActive(false);
+            // SensorManager.SetActive(false);
         }
 
         try

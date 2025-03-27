@@ -62,8 +62,6 @@ public class ActivitySensor : MonoBehaviour
         if (shouldShowButtons != buttonsVisible)
         {
             SetButtonsVisibility(shouldShowButtons);
-
-
         }
         
         // Only process input if buttons are visible

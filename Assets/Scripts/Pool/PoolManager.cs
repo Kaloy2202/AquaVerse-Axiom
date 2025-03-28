@@ -112,6 +112,13 @@ public class PoolManager : MonoBehaviour
         fishHarvestedText.text = $"{totalFishMass / 1000}";
         totalFishMass = 0; // Reset total fish mass after harvesting
         numberOfFish = 0;
+        PlayerStats.Instance.fingerlingsCosts = 0;
+        PlayerStats.Instance.maintenanceCosts = 0;
+        PlayerStats.Instance.feedCosts = 0;
+        PlayerStats.Instance.feedsBought = 0;
+        PlayerStats.Instance.feedsUsed = 0;
+        PlayerStats.Instance.feedsWasted = 0;
+        PlayerStats.Instance.totalCosts = 0;
         GameObject[] fishes = GameObject.FindGameObjectsWithTag("fish");
         foreach(GameObject go in fishes){
             Destroy(go);

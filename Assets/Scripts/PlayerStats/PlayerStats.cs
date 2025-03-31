@@ -13,6 +13,13 @@ public class PlayerStats : MonoBehaviour
     public float money = 1000;
     public int totalStocks = 1000;
     public int availableStocks = 1000;
+    public int fingerlingsCosts = 0;
+    public int maintenanceCosts = 0;
+    public int feedsBought = 0;
+    public int feedCosts = 0;
+    public int feedsUsed = 0;
+    public int feedsWasted = 0;
+    public int totalCosts = 0;
 
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI experienceText;
@@ -40,7 +47,7 @@ public class PlayerStats : MonoBehaviour
     private void Start()
     {
         UpdateUI();
-        SensorManager.SetActive(false);
+        // SensorManager.SetActive(false);
     }
 
     private void Update()
@@ -78,7 +85,7 @@ public class PlayerStats : MonoBehaviour
         // Deactivate sensor manager
         if (SensorManager != null)
         {
-            SensorManager.SetActive(false);
+            // SensorManager.SetActive(false);
         }
 
         try
@@ -170,7 +177,37 @@ public class PlayerStats : MonoBehaviour
             availableStocks = 0;
         }
     }
-
+    public void AddFingerlingsCost(int amount)
+    {
+        fingerlingsCosts += amount;
+        totalCosts += amount;
+    }
+    public void AddMaintenanceCost(int amount)
+    {
+        maintenanceCosts += amount;
+        totalCosts += amount;
+    }
+    public void AddFeedCost(int amount)
+    {
+        feedCosts += amount;
+        totalCosts += amount;
+    }
+    public void AddFeedsBought(int amount)
+    {
+        feedsBought += amount;
+    }
+    public void AddFeedsUsed(int amount)
+    {
+        feedsUsed += amount;
+    }
+    public void AddFeedsWasted(int amount)
+    {
+        feedsWasted += amount;
+    }
+    public void AddTotalCosts(int amount)
+    {
+        totalCosts += amount;
+    }
     private void UpdateStockUI()
     {
         if (stockText != null)

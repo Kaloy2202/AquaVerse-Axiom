@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class PoolManager : MonoBehaviour
 {
@@ -17,8 +18,19 @@ public class PoolManager : MonoBehaviour
     private int numberOfFish = 0;
     private float totalFishMass = 0;
     private bool startSpawn = false;    
+
+
+
     public Canvas canvas;
-    public TextMeshProUGUI textmsg;
+
+    public TextMeshProUGUI fingerlingsCostText;
+    public TextMeshProUGUI waterCostText;
+    public TextMeshProUGUI feedWeightText;
+    public TextMeshProUGUI feedCostText;
+    public TextMeshProUGUI feedsUsedText;
+    public TextMeshProUGUI feedsWastedText;
+    public TextMeshProUGUI fishHarvestedText;
+    public TextMeshProUGUI totalCostText;
     
     // Temperature
     private float minPoolTemp = 24;
@@ -90,9 +102,23 @@ public class PoolManager : MonoBehaviour
         // PlayerStats.Instance.GainExperience(500);
         Debug.Log("Fish harvested and added to player inventory." + (int)totalFishMass);
         canvas.gameObject.SetActive(true);
-        textmsg.text = $"You gained {totalFishMass} grams of fish! Press F2 to access the store and sell your proceeds!";
+        fingerlingsCostText.text = $"{PlayerStats.Instance.fingerlingsCosts}";
+        waterCostText.text = $"{PlayerStats.Instance.maintenanceCosts}";
+        feedWeightText.text = $"{PlayerStats.Instance.feedsBought}";
+        feedCostText.text = $"{PlayerStats.Instance.feedCosts}";
+        feedsUsedText.text = $"{PlayerStats.Instance.feedsUsed}";
+        feedsWastedText.text = $"{PlayerStats.Instance.feedsWasted}";
+        totalCostText.text = $"{PlayerStats.Instance.totalCosts}";
+        fishHarvestedText.text = $"{totalFishMass / 1000}";
         totalFishMass = 0; // Reset total fish mass after harvesting
         numberOfFish = 0;
+        PlayerStats.Instance.fingerlingsCosts = 0;
+        PlayerStats.Instance.maintenanceCosts = 0;
+        PlayerStats.Instance.feedCosts = 0;
+        PlayerStats.Instance.feedsBought = 0;
+        PlayerStats.Instance.feedsUsed = 0;
+        PlayerStats.Instance.feedsWasted = 0;
+        PlayerStats.Instance.totalCosts = 0;
         GameObject[] fishes = GameObject.FindGameObjectsWithTag("fish");
         foreach(GameObject go in fishes){
             Destroy(go);

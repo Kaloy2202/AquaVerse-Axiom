@@ -25,7 +25,7 @@ public class DialogDisappearOnClick : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
 
-            PlayerStats.Instance.GainExperience(exp);
+            // PlayerStats.Instance.GainExperience(exp);
             sceneMngrState.setCanDoPondActions(true);
             canDoPondActions = true;
             isActive = false;

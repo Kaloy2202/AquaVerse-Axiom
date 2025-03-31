@@ -35,7 +35,7 @@ public class Challenge
     private void GiveReward(PlayerStats playerStats)
     {
         Debug.Log("Challenge completed: " + challengeName);
-        playerStats.GainExperience(experienceReward); // Reward experience
+        // playerStats.GainExperience(experienceReward); // Reward experience
         playerStats.AddMoney(moneyReward); // Reward money
 
         UnlockNewTool();

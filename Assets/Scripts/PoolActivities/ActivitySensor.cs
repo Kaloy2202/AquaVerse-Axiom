@@ -62,8 +62,6 @@ public class ActivitySensor : MonoBehaviour
         if (shouldShowButtons != buttonsVisible)
         {
             SetButtonsVisibility(shouldShowButtons);
-
-
         }
         
         // Only process input if buttons are visible
@@ -100,14 +98,19 @@ public class ActivitySensor : MonoBehaviour
                     case 1:
                         handleSpawnStatus();
                         PlayerStats.Instance.AddMoney(-200);
+                        PlayerStats.Instance.AddFingerlingsCost(200);
                         break;
                     case 0:
                         handleFeedStatus();
                         PlayerStats.Instance.AddMoney(-20);
+                        PlayerStats.Instance.AddFeedCost(20);
+                        PlayerStats.Instance.AddFeedsBought(1);
+                        PlayerStats.Instance.AddFeedsUsed(1);
                         break;
                     case 2:
                         handleChangeWater();
                         PlayerStats.Instance.AddMoney(-500);
+                        PlayerStats.Instance.AddMaintenanceCost(500);
                         break;
                 }
             }
